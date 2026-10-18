@@ -12,10 +12,11 @@ using System.IO;
 using System.Linq;
 using MusicPlayer.Views;
 using Windows.System;
+using WinUiShared;
 
 namespace MusicPlayer
 {
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainWindow : Window, IAppMainWindow
     {
         private const int DefaultClientWidth = 1200;
         private const int DefaultClientHeight = 760;
@@ -248,7 +249,7 @@ namespace MusicPlayer
 
         public void NavigateToPageTag(string tag) => NavigateToPage(tag, force: false, suppressTransition: true);
 
-        internal void SaveWindowBoundsFromRuntime() => SaveWindowBounds();
+        public void SaveWindowBoundsFromRuntime() => SaveWindowBounds();
 
         /// <summary>起動直後はライブラリを表示する（再生中の曲がまだ無いため）。</summary>
         private static string GetDefaultPageTag() => "Library";

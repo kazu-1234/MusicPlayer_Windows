@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using MusicPlayer.Services;
+using WinUiShared;
 
 namespace MusicPlayer.Views
 {
@@ -83,7 +84,7 @@ namespace MusicPlayer.Views
             if (preference == _state.Settings.ThemePreference)
                 return;
 
-            ThemeService.SetPreference(preference, save: false);
+            ThemeService.SetPreference(preference);
             _state.Settings.ThemePreference = preference;
             _state.Settings.Save();
         }

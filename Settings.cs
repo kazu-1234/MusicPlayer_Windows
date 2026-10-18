@@ -8,7 +8,7 @@ using WinUiShared;
 
 namespace MusicPlayer
 {
-    public class Settings : IUpdateSettings
+    public class Settings : IAppHostSettings
     {
         /// <summary>デフォルトはシステム連動。</summary>
         public AppThemePreference ThemePreference { get; set; } = AppThemePreference.System;
@@ -109,43 +109,22 @@ namespace MusicPlayer
         /// <summary>この PC を Android 側で見分けるための ID（初回の同期で作る）。</summary>
         public string SyncClientId { get; set; } = "";
 
+        // ウィンドウ型なのでトレイ・自動起動は使わない。明示的な実装にして JSON には出さない（既存の settings.json と同じ形を保つ）
+        bool IAppHostSettings.HideTrayIcon => false;
+        bool IAppHostSettings.AutoStart => false;
+
         private static string SettingsFilePath =>
             Path.Combine(AppConfig.AppDataFolder, "settings.json");
 
-        public static Settings Load()
-        {
-            try
-            {
-                if (File.Exists(SettingsFilePath))
-                {
-                    string json = File.ReadAllText(SettingsFilePath);
-                    // 既定値入りのリストに JSON の値が追記されないよう、コレクションは置き換えで復元する
-                    var settings = JsonConvert.DeserializeObject<Settings>(json,
-                        new JsonSerializerSettings { ObjectCreationHandling = ObjectCreationHandling.Replace });
-                    if (settings != null)
-                        return settings;
-                }
-            }
-            catch
-            {
-                // 破損時はデフォルト設定を返す
-            }
+        /// <summary>既定値入りのリストに JSON の値が追記されないよう、コレクションは置き換えで復元する。</summary>
+        private static readonly JsonSerializerSettings LoadSerializerSettings =
+            new() { ObjectCreationHandling = ObjectCreationHandling.Replace };
 
-            return new Settings();
-        }
+        /// <summary>読み込み。無い・壊れているときは既定値（壊れていれば 1 つ前の保存版 .bak で救済）。</summary>
+        public static Settings Load() =>
+            JsonSettingsFile.Load<Settings>(SettingsFilePath, LoadSerializerSettings) ?? new Settings();
 
-        public void Save()
-        {
-            try
-            {
-                Directory.CreateDirectory(AppConfig.AppDataFolder);
-                string json = JsonConvert.SerializeObject(this, Formatting.Indented);
-                File.WriteAllText(SettingsFilePath, json);
-            }
-            catch
-            {
-                // 保存失敗は無視（次回は既定値で起動する）
-            }
-        }
+        /// <summary>保存（一時ファイル → 差し替えで、途中で落ちても壊れない）。失敗は無視する（次回は前回の保存内容で起動する）。</summary>
+        public void Save() => JsonSettingsFile.Save(SettingsFilePath, this);
     }
 }

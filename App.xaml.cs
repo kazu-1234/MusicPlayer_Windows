@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using WinUiShared;
 
 namespace MusicPlayer
 {
@@ -60,8 +61,7 @@ namespace MusicPlayer
                 AppRuntime.AppendLifetimeLog($"resource-override-failed {ex}");
             }
 
-            // アップデートの確認先（GitHub の Releases の最新版）。タグ vX.Y.Z と *setup*.exe を見て更新を判断する
-            UpdateChecker.LatestReleaseApiUrl = "https://api.github.com/repos/kazu-1234/MusicPlayer_Windows/releases/latest";
+            // アップデートの確認先は AppSetup.Profile.LatestReleaseApiUrl
 
             var settings = Settings.Load();
             // ライブラリの読み込み（並べ替え）より前に、名前の並べ方の設定を反映しておく
@@ -74,17 +74,19 @@ namespace MusicPlayer
             var openFiles = GetAudioFileArgs();
 
             // 開くファイルがあるときは、パスを書いてから表示依頼を送る（先に起こすと、相手がまだ空のファイルを読んでしまう）
-            if (!SingleInstanceManager.TryBecomePrimaryInstance(requestInteractiveShow: openFiles.Count == 0))
+            if (!SingleInstance.TryBecomePrimaryInstance(
+                    requestInteractiveShow: openFiles.Count == 0,
+                    onBecamePrimary: OpenRequestChannel.ClearStale))
             {
                 if (openFiles.Count > 0)
-                    SingleInstanceManager.SignalOpenFiles(openFiles);
+                    OpenRequestChannel.Signal(openFiles);
                 // 既に起動中のインスタンスへ依頼を送ったので、このプロセスは何もせず終了する
                 Exit();
                 return;
             }
 
             _runtime = new AppRuntime(this, settings);
-            _runtime.Start(launchInBackground: false, requestInteractiveShow: true, openFiles);
+            _runtime.Start(openFiles);
         }
 
         /// <summary>

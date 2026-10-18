@@ -3,6 +3,11 @@
 このドキュメントは、BlueShift / SmartPowerManager で確立した WinUI 3（Windows App SDK, unpackaged）アプリのアーキテクチャを整理したものです。
 このテンプレート（`WinUiAppTemplate`）はこのアーキテクチャに従って実装されています。**新しい C# WinUI 3 アプリを作る際は、このテンプレートをコピーし、本ドキュメントのルールを維持したまま拡張してください。** Cursor 向け要約は Skill `winui-csharp`（WinUI / `.cs` / `.xaml` のときだけ）。詳細・数値・アンチパターンは本ファイルが正本。
 
+> **v2.3.0 以降（共通基盤へ移行済み）**: 二重起動・更新確認・窓位置・設定保存・テーマ・プロセス寿命の共通処理は
+> `WinUiAppTemplate/Shared/Hosting`（`AppRuntimeBase` / `SingleInstance` / `AppUpdate` / `WindowPlacementHelper` / `JsonSettingsFile` / `AppBootstrap`）と `WinUiShared` のテーマ系が正本で、
+> 最新の説明は `WinUiAppTemplate/ARCHITECTURE.md`。本文中の `SingleInstanceManager` / `UpdateChecker` / `UpdateInstallerService` / `UpdateFlowService` / `ThemeService.cs` / `TitleBarThemeHelper.cs` は共通基盤の同名機能に読み替える。
+> MusicPlayer の型は `AppSetup.cs` の `AppProfile`（**ウィンドウ型** + 復帰監視あり、× でプロセス終了）。エクスプローラーから開いたファイルの受け渡しは Music 固有の `OpenRequestChannel.cs`。
+
 ### 派生アプリの型（エージェント必守）
 
 新規は本フォルダを複製し、名前 / Mutex / アイコン / Release URL を差し替える。
