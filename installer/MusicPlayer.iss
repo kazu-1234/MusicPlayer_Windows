@@ -3,7 +3,7 @@
 ; 複製時は MyAppName / AppId / URL / アイコンパスを新しいアプリ名に変更すること。
 
 #define MyAppName "MusicPlayer"
-#define MyAppVersion "2.0.0"
+#define MyAppVersion "2.2.0"
 #define MyAppPublisher "kazu-1234"
 #define MyAppURL "https://github.com/kazu-1234/MusicPlayer_Windows"
 #define MyAppExeName "MusicPlayer.exe"
