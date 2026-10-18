@@ -1,0 +1,142 @@
+<Page
+    x:Class="MusicPlayer.Views.SyncPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:views="using:MusicPlayer.Views"
+    NavigationCacheMode="Required"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch">
+    <views:PageScrollHost>
+        <Grid>
+            <StackPanel Style="{StaticResource PageBaseStackPanelStyle}">
+                <TextBlock x:Uid="Page_Sync" Style="{StaticResource PageTitleTextStyle}" />
+
+                <!-- ───── 実行（毎回使うのでページの先頭に置く。比較結果・削除候補・進み具合もここに出す） ───── -->
+                <TextBlock x:Uid="Sync_SectionRun" Style="{StaticResource SettingsSectionHeaderFirstStyle}" />
+
+                <!-- 下の SettingsCard と同じ背景・枠線・角丸で囲み、実行部だけ浮いて見えないようにする -->
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="{ThemeResource ControlCornerRadius}"
+                        Padding="{StaticResource PlainCardPadding}">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                            <Button x:Name="CompareButton" Click="CompareButton_Click">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE9D5;" FontSize="14" />
+                                    <TextBlock x:Uid="Sync_Compare" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="StartButton" Style="{StaticResource PrimaryActionButtonStyle}" IsEnabled="False" Click="StartButton_Click">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE895;" FontSize="14" />
+                                    <TextBlock x:Uid="Sync_Start" />
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="CancelButton" x:Uid="Button_Cancel" IsEnabled="False" Click="CancelButton_Click" />
+                        </StackPanel>
+
+                        <TextBlock x:Name="SummaryText" Margin="0,12,0,0" TextWrapping="Wrap" />
+
+                        <!-- 削除候補: 既定は削除しない。チェックしたときだけ同期時に Android から消す -->
+                        <controls:SettingsExpander x:Name="DeleteExpander" x:Uid="Sync_DeleteList" Margin="0,12,0,0" Visibility="Collapsed">
+                            <controls:SettingsExpander.HeaderIcon>
+                                <FontIcon Glyph="&#xE74D;" />
+                            </controls:SettingsExpander.HeaderIcon>
+                            <CheckBox x:Name="DeleteCheck" x:Uid="Sync_DeleteCheck" />
+                            <controls:SettingsExpander.ItemsHeader>
+                                <StackPanel x:Name="DeletePanel" Margin="56,8,16,8" Spacing="2" />
+                            </controls:SettingsExpander.ItemsHeader>
+                        </controls:SettingsExpander>
+
+                        <StackPanel x:Name="ProgressArea" Margin="0,12,0,0" Spacing="4" Visibility="Collapsed">
+                            <ProgressBar x:Name="SyncProgressBar" Maximum="1000" />
+                            <TextBlock x:Name="ProgressText" Style="{StaticResource CaptionTextBlockStyle}" />
+                            <TextBlock x:Name="CurrentFileText" Style="{StaticResource CaptionTextBlockStyle}"
+                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- ───── 端末 ───── -->
+                <TextBlock x:Uid="Sync_SectionDevice" Style="{StaticResource SettingsSectionHeaderStyle}" />
+
+                <!-- 接続先: ペアリング済み＋探索で見つかった端末から選ぶ -->
+                <controls:SettingsCard x:Uid="Sync_Device">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8EA;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                        <ComboBox x:Name="DeviceCombo" MinWidth="240" SelectionChanged="DeviceCombo_SelectionChanged" />
+                        <Button x:Name="SearchButton" Click="SearchButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE721;" FontSize="14" />
+                                <TextBlock x:Uid="Sync_Search" />
+                            </StackPanel>
+                        </Button>
+                        <Button x:Name="ForgetButton" Click="ForgetButton_Click">
+                            <FontIcon Glyph="&#xE74D;" FontSize="14" />
+                        </Button>
+                    </StackPanel>
+                </controls:SettingsCard>
+
+                <!-- 探索で見つからないとき: Android の同期画面に出ている IP を入力 -->
+                <controls:SettingsCard x:Uid="Sync_AddByIp">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE968;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                        <TextBox x:Name="HostBox" x:Uid="Sync_HostBox" MinWidth="200" />
+                        <Button x:Name="ConnectButton" x:Uid="Sync_Connect" Click="ConnectButton_Click" />
+                    </StackPanel>
+                </controls:SettingsCard>
+
+                <!-- 未ペアリングの端末を選んだときだけ出す -->
+                <controls:SettingsCard x:Name="PinCard" x:Uid="Sync_Pin" Visibility="Collapsed">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE72E;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                        <TextBox x:Name="PinBox" x:Uid="Sync_PinBox" MinWidth="120" MaxLength="6" />
+                        <Button x:Name="PairButton" x:Uid="Sync_PairButton" Click="PairButton_Click" />
+                    </StackPanel>
+                </controls:SettingsCard>
+
+                <TextBlock x:Name="DeviceStatusText" Margin="0,8,0,0" Style="{StaticResource CaptionTextBlockStyle}"
+                           TextWrapping="Wrap" Visibility="Collapsed" />
+
+                <!-- ───── 同期する対象（拡張子 AND フォルダ） ───── -->
+                <TextBlock x:Uid="Sync_SectionTarget" Style="{StaticResource SettingsSectionHeaderStyle}" />
+
+                <controls:SettingsExpander x:Uid="Sync_Extensions" IsExpanded="True">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE8A5;" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <controls:SettingsExpander.ItemsHeader>
+                        <VariableSizedWrapGrid x:Name="ExtensionPanel" Orientation="Horizontal" ItemWidth="180" Margin="56,8,16,8" />
+                    </controls:SettingsExpander.ItemsHeader>
+                </controls:SettingsExpander>
+
+                <controls:SettingsExpander x:Uid="Sync_Folders" IsExpanded="True">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE8B7;" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <controls:SettingsExpander.ItemsHeader>
+                        <StackPanel x:Name="FolderPanel" Margin="56,8,16,8" />
+                    </controls:SettingsExpander.ItemsHeader>
+                </controls:SettingsExpander>
+
+                <controls:SettingsExpander x:Uid="Sync_Playlists">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE90B;" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <controls:SettingsExpander.ItemsHeader>
+                        <StackPanel x:Name="PlaylistPanel" Margin="56,8,16,8" />
+                    </controls:SettingsExpander.ItemsHeader>
+                </controls:SettingsExpander>
+            </StackPanel>
+        </Grid>
+    </views:PageScrollHost>
+</Page>

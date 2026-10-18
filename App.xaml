@@ -14,6 +14,8 @@
             <x:Double x:Key="PageContentMaxWidth">1000</x:Double>
             <x:Double x:Key="SettingsCardSpacing">4</x:Double>
             <x:Double x:Key="ControlRowSpacing">12</x:Double>
+            <!-- SettingsCard を使わずに自前でカード枠を描くとき（同期画面の実行部など）の内側の余白 -->
+            <Thickness x:Key="PlainCardPadding">16</Thickness>
 
             <Style x:Key="PageHostScrollViewerStyle" TargetType="ScrollViewer">
                 <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />

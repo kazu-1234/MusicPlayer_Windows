@@ -8,17 +8,22 @@ namespace MusicPlayer
     /// </summary>
     public sealed class AppState
     {
-        public AppState(Settings settings, LibraryService library, PlaybackService playback, PlaylistService playlists)
+        public AppState(Settings settings, LibraryService library, PlaybackService playback, PlaylistService playlists,
+            AndroidSyncService sync)
         {
             Settings = settings;
             Library = library;
             Playback = playback;
             Playlists = playlists;
+            Sync = sync;
         }
 
         public Settings Settings { get; }
         public LibraryService Library { get; }
         public PlaybackService Playback { get; }
         public PlaylistService Playlists { get; }
+
+        /// <summary>Android 版への同期（PC → Android）。</summary>
+        public AndroidSyncService Sync { get; }
     }
 }

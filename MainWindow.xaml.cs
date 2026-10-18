@@ -30,6 +30,7 @@ namespace MusicPlayer
             ["TagEditor"] = typeof(TagEditorPage),
             ["CdRip"] = typeof(CdRipPage),
             ["Convert"] = typeof(ConvertPage),
+            ["Sync"] = typeof(SyncPage),
             ["Info"] = typeof(InfoPage),
             ["Settings"] = typeof(SettingsPage)
         };
@@ -326,15 +327,16 @@ namespace MusicPlayer
 
         private void NavView_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            // 「プレイリスト」自体はページを持たない。押したら子項目（各プレイリスト）の開閉だけを切り替える
-            if (ReferenceEquals(args.InvokedItemContainer, NavItemPlaylists))
+            // 「プレイリスト」「編集」自体はページを持たない。押したら子項目の開閉だけを切り替える
+            if (ReferenceEquals(args.InvokedItemContainer, NavItemPlaylists) || ReferenceEquals(args.InvokedItemContainer, NavItemEdit))
             {
                 // NavigationView は ItemInvoked を出した「後」に、子を持つ項目の開閉を自分でも反転する。
                 // ここで直接反転すると二重反転で元に戻ってしまう（三角マークでしか開閉できなかった原因）。
                 // そこで押した時点の逆を目標として覚え、既定処理が終わった後（次の UI 処理）に確定させる。
                 // 既定処理が反転してもしなくても、1 回押す = 1 回開閉 になる
-                bool target = !NavItemPlaylists.IsExpanded;
-                DispatcherQueue.TryEnqueue(() => NavItemPlaylists.IsExpanded = target);
+                var group = (NavigationViewItem)args.InvokedItemContainer;
+                bool target = !group.IsExpanded;
+                DispatcherQueue.TryEnqueue(() => group.IsExpanded = target);
                 return;
             }
 
@@ -397,13 +399,18 @@ namespace MusicPlayer
 
         private void UpdateNavSelection(string tag)
         {
-            // 子項目（プレイリスト）も探す
+            // 子項目（プレイリスト・編集の各ページ）も探す
+            var editItems = NavItemEdit.MenuItems.OfType<NavigationViewItem>().ToList();
             var match = NavView.MenuItems.OfType<NavigationViewItem>()
                 .Concat(_playlistNavItems)
+                .Concat(editItems)
                 .Concat(NavView.FooterMenuItems.OfType<NavigationViewItem>())
                 .FirstOrDefault(item => item.Tag as string == tag);
+            // 折りたたまれていても選択中の項目が見えるように、親を開く
             if (match != null && _playlistNavItems.Contains(match))
-                NavItemPlaylists.IsExpanded = true; // 折りたたまれていても選択中の項目が見えるように開く
+                NavItemPlaylists.IsExpanded = true;
+            if (match != null && editItems.Contains(match))
+                NavItemEdit.IsExpanded = true;
 
             // プレイリストが見つからない（一覧の作り直し前など）ときは何も選ばない。
             // 「プレイリスト」自体は選択できない項目なので、代わりに選ぶこともしない

@@ -80,6 +80,35 @@ namespace MusicPlayer
         /// <summary>変換の出力先。空なら元ファイルと同じフォルダ。</summary>
         public string ConvertOutputFolder { get; set; } = "";
 
+        // ───────── Android 同期 ─────────
+
+        /// <summary>同期する拡張子（小文字・ドット付き）。空なら初回表示時にライブラリにある全部を選ぶ。</summary>
+        public List<string> SyncExtensions { get; set; } = new();
+
+        /// <summary>同期するフォルダ（同期の基準フォルダからの相対パス、区切りは "/"）。空なら初回表示時に全部を選ぶ。</summary>
+        public List<string> SyncFolders { get; set; } = new();
+
+        /// <summary>
+        /// SyncFolders を書いたときのフォルダの形式（AppConfig.SyncFolderFormat）。
+        /// 基準フォルダや段数を変えると保存済みの値が今のフォルダと合わなくなるので、違っていたらフォルダの選択だけ初回扱いに戻す。
+        /// </summary>
+        public int SyncFolderFormat { get; set; }
+
+        /// <summary>同期しないプレイリスト（ファイル名）。新しく作ったプレイリストは同期する側に入るよう「除外」で持つ。</summary>
+        public List<string> SyncExcludedPlaylists { get; set; } = new();
+
+        /// <summary>同期画面で、まだ一度も対象を保存していないか（初回は全部を選んだ状態で表示するため）。</summary>
+        public bool SyncSelectionInitialized { get; set; }
+
+        /// <summary>ペアリング済みの Android 端末。</summary>
+        public List<SyncDevice> SyncDevices { get; set; } = new();
+
+        /// <summary>最後に使った端末の ID。</summary>
+        public string LastSyncDeviceId { get; set; } = "";
+
+        /// <summary>この PC を Android 側で見分けるための ID（初回の同期で作る）。</summary>
+        public string SyncClientId { get; set; } = "";
+
         private static string SettingsFilePath =>
             Path.Combine(AppConfig.AppDataFolder, "settings.json");
 

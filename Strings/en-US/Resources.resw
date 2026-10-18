@@ -213,9 +213,6 @@ MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
   <data name="Nav_Playlists.Content" xml:space="preserve">
     <value>Playlists</value>
   </data>
-  <data name="Nav_EditHeader.Content" xml:space="preserve">
-    <value>Edit</value>
-  </data>
   <data name="Nav_TagEditor.Content" xml:space="preserve">
     <value>Tag editor</value>
   </data>
@@ -752,5 +749,152 @@ MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
   </data>
   <data name="Settings_DefaultAppButton.Content" xml:space="preserve">
     <value>Register and open</value>
+  </data>
+  <data name="Nav_Sync.Content" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="Nav_Edit.Content" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Page_Sync.Text" xml:space="preserve">
+    <value>Sync</value>
+  </data>
+  <data name="Sync_SectionDevice.Text" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="Sync_Device.Header" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="Sync_Device.Description" xml:space="preserve">
+    <value>Turn on Receive on Android, then search</value>
+  </data>
+  <data name="Sync_Search.Text" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Sync_AddByIp.Header" xml:space="preserve">
+    <value>Connect by IP address</value>
+  </data>
+  <data name="Sync_AddByIp.Description" xml:space="preserve">
+    <value>IP shown on the Android sync screen</value>
+  </data>
+  <data name="Sync_HostBox.PlaceholderText" xml:space="preserve">
+    <value>192.168.0.10</value>
+  </data>
+  <data name="Sync_Connect.Content" xml:space="preserve">
+    <value>Connect</value>
+  </data>
+  <data name="Sync_Pin.Header" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Sync_Pin.Description" xml:space="preserve">
+    <value>6-digit number shown on Android</value>
+  </data>
+  <data name="Sync_PinBox.PlaceholderText" xml:space="preserve">
+    <value>000000</value>
+  </data>
+  <data name="Sync_PairButton.Content" xml:space="preserve">
+    <value>Pair</value>
+  </data>
+  <data name="Sync_SectionTarget.Text" xml:space="preserve">
+    <value>What to sync</value>
+  </data>
+  <data name="Sync_Extensions.Header" xml:space="preserve">
+    <value>File types</value>
+  </data>
+  <data name="Sync_Folders.Header" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="Sync_Playlists.Header" xml:space="preserve">
+    <value>Playlists</value>
+  </data>
+  <data name="Sync_SectionRun.Text" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="Sync_Compare.Text" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="Sync_Start.Text" xml:space="preserve">
+    <value>Start sync</value>
+  </data>
+  <data name="Sync_DeleteList.Header" xml:space="preserve">
+    <value>Files to delete</value>
+  </data>
+  <data name="Sync_DeleteList.Description" xml:space="preserve">
+    <value>Not on this PC (deleted only when checked)</value>
+  </data>
+  <data name="Sync_DeleteCheck.Content" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Sync_DeleteHeaderFormat" xml:space="preserve">
+    <value>Files to delete ({0})</value>
+  </data>
+  <data name="Sync_DeleteChoiceTitle" xml:space="preserve">
+    <value>Files to delete on Android</value>
+  </data>
+  <data name="Sync_DeleteChoiceMessage" xml:space="preserve">
+    <value>{0} files on Android are not on this PC. Deleting them cannot be undone.</value>
+  </data>
+  <data name="Sync_DeleteChoiceDelete" xml:space="preserve">
+    <value>Delete and sync</value>
+  </data>
+  <data name="Sync_DeleteChoiceKeep" xml:space="preserve">
+    <value>Sync without deleting</value>
+  </data>
+  <data name="Sync_Reconnecting" xml:space="preserve">
+    <value>Could not connect. Searching for the device again…</value>
+  </data>
+  <data name="Sync_NotFoundHint" xml:space="preserve">
+    <value>Make sure receiving is turned on in the Android app's sync screen.</value>
+  </data>
+  <data name="Sync_SummaryFormat" xml:space="preserve">
+    <value>Add {0} · Overwrite {1} · Unchanged {2} · To delete {3} (transfer {4} · playlists {5})</value>
+  </data>
+  <data name="Sync_ProgressFormat" xml:space="preserve">
+    <value>{0} / {1} files ({2} / {3})</value>
+  </data>
+  <data name="Sync_ItemCountFormat" xml:space="preserve">
+    <value>{0} ({1:N0})</value>
+  </data>
+  <data name="Sync_MoreFormat" xml:space="preserve">
+    <value>{0} more</value>
+  </data>
+  <data name="Sync_RootFolder" xml:space="preserve">
+    <value>(Top level)</value>
+  </data>
+  <data name="Sync_Searching" xml:space="preserve">
+    <value>Searching…</value>
+  </data>
+  <data name="Sync_NotFound" xml:space="preserve">
+    <value>No device found. Turn on "Receive" on Android and connect to the same network.</value>
+  </data>
+  <data name="Sync_FoundFormat" xml:space="preserve">
+    <value>{0} device(s) found</value>
+  </data>
+  <data name="Sync_ConnectFailed" xml:space="preserve">
+    <value>Could not connect. Check that "Receive" is on in Android.</value>
+  </data>
+  <data name="Sync_NeedPair" xml:space="preserve">
+    <value>Pairing is required. Enter the PIN.</value>
+  </data>
+  <data name="Sync_PairFailed" xml:space="preserve">
+    <value>Pairing failed. Check the PIN.</value>
+  </data>
+  <data name="Sync_Paired" xml:space="preserve">
+    <value>Paired</value>
+  </data>
+  <data name="Sync_NoDevice" xml:space="preserve">
+    <value>Select a device</value>
+  </data>
+  <data name="Sync_Comparing" xml:space="preserve">
+    <value>Comparing…</value>
+  </data>
+  <data name="Sync_Done" xml:space="preserve">
+    <value>Sync completed</value>
+  </data>
+  <data name="Sync_Canceled" xml:space="preserve">
+    <value>Canceled</value>
+  </data>
+  <data name="Sync_ErrorFormat" xml:space="preserve">
+    <value>Error: {0}</value>
   </data>
 </root>

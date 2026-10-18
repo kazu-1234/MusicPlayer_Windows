@@ -130,7 +130,7 @@ namespace MusicPlayer.Services
         }
 
         /// <summary>バイト数を「34.5 MB」のように 1024 単位で整形する（エクスプローラーの表示に合わせる）。</summary>
-        private static string FormatSize(long bytes)
+        internal static string FormatSize(long bytes)
         {
             const double Kb = 1024, Mb = Kb * 1024, Gb = Mb * 1024;
             return bytes >= Gb ? $"{bytes / Gb:0.00} GB"

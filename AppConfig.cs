@@ -224,5 +224,64 @@ namespace MusicPlayer
 
         /// <summary>タグ編集の「オンラインで取得」で表示する候補の最大数。</summary>
         public const int OnlineLookupMaxCandidates = 15;
+
+        // ───────── Android 同期 ─────────
+        // 値は Android 版（sync/SyncConfig.kt）と必ずそろえる
+
+        /// <summary>Android 側の受信サーバー（HTTP）のポート。</summary>
+        public const int SyncHttpPort = 51515;
+
+        /// <summary>端末の探索に使う UDP ポート（Win がここへブロードキャストし、受信待機中の Android が返事をする）。</summary>
+        public const int SyncDiscoveryPort = 51516;
+
+        /// <summary>探索のブロードキャストで送る合言葉（Android はこれ以外のパケットには返事をしない）。</summary>
+        public const string SyncDiscoveryMessage = "MPSYNC_DISCOVER";
+
+        /// <summary>探索で返事を待つ時間（ミリ秒）。</summary>
+        public const int SyncDiscoveryTimeoutMs = 2000;
+
+        /// <summary>探索のブロードキャストを送る回数（UDP は届かないことがあるので数回送る）。</summary>
+        public const int SyncDiscoveryRepeat = 3;
+
+        /// <summary>
+        /// 一覧取得・削除などの HTTP 要求のタイムアウト（秒）。
+        /// Android の一覧取得は曲数が多いと時間がかかる（SD カードなどで遅い読み方になったとき）ので余裕を持たせる。
+        /// </summary>
+        public const int SyncRequestTimeoutSeconds = 300;
+
+        /// <summary>
+        /// 使い終わった接続を手放すまでの時間（秒）。Android 側が無通信の接続を切る時間（60 秒）より短くする。
+        /// </summary>
+        public const int SyncIdleConnectionSeconds = 30;
+
+        /// <summary>
+        /// 1 ファイル送信のタイムアウト（秒）。ハイレゾ FLAC は数百 MB になることがあるので長めにする。
+        /// </summary>
+        public const int SyncUploadTimeoutSeconds = 1800;
+
+        /// <summary>ファイル送信時の読み出しバッファ（byte）。</summary>
+        public const int SyncUploadBufferSize = 256 * 1024;
+
+        /// <summary>
+        /// 同期の相対パスの基準フォルダ（PC の「ミュージック\Music」。中に FLAC・MP3 など形式ごとのフォルダがある）。
+        /// Android の同期画面で選ぶ同期先フォルダがこのフォルダに当たる（PC の FLAC\… は Android の 同期先\FLAC\… になる）。
+        /// </summary>
+        public static string SyncBaseFolder => Path.Combine(DefaultLibraryFolder, "Music");
+
+        /// <summary>
+        /// 同期画面の「フォルダ」の一覧に出す階層の深さ（基準フォルダからの段数）。
+        /// 1 なら「FLAC」「MP3」のように、形式ごとのフォルダを選べる。
+        /// </summary>
+        public const int SyncFolderDepth = 1;
+
+        /// <summary>
+        /// 同期画面のフォルダの形式の番号。SyncBaseFolder や SyncFolderDepth を変えたら 1 増やす
+        /// （保存済みのフォルダ選択が古い形式なら、フォルダだけ全部チェックの状態に戻すため）。
+        /// 1 = 基準「ミュージック」・2 段、2 = 基準「ミュージック\Music」・1 段。
+        /// </summary>
+        public const int SyncFolderFormat = 2;
+
+        /// <summary>同期画面の削除候補・転送予定の一覧に表示する最大件数（多すぎると画面が重くなるため）。</summary>
+        public const int SyncPreviewMaxItems = 500;
     }
 }

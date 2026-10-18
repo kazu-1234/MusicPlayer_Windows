@@ -213,9 +213,6 @@ MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
   <data name="Nav_Playlists.Content" xml:space="preserve">
     <value>プレイリスト</value>
   </data>
-  <data name="Nav_EditHeader.Content" xml:space="preserve">
-    <value>編集</value>
-  </data>
   <data name="Nav_TagEditor.Content" xml:space="preserve">
     <value>タグ編集</value>
   </data>
@@ -752,5 +749,152 @@ MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
   </data>
   <data name="Settings_DefaultAppButton.Content" xml:space="preserve">
     <value>登録して開く</value>
+  </data>
+  <data name="Nav_Sync.Content" xml:space="preserve">
+    <value>同期</value>
+  </data>
+  <data name="Nav_Edit.Content" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="Page_Sync.Text" xml:space="preserve">
+    <value>同期</value>
+  </data>
+  <data name="Sync_SectionDevice.Text" xml:space="preserve">
+    <value>端末</value>
+  </data>
+  <data name="Sync_Device.Header" xml:space="preserve">
+    <value>接続先</value>
+  </data>
+  <data name="Sync_Device.Description" xml:space="preserve">
+    <value>Android で受信待機をオンにしてから検索</value>
+  </data>
+  <data name="Sync_Search.Text" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="Sync_AddByIp.Header" xml:space="preserve">
+    <value>IP アドレスで接続</value>
+  </data>
+  <data name="Sync_AddByIp.Description" xml:space="preserve">
+    <value>Android の同期画面に出ている IP</value>
+  </data>
+  <data name="Sync_HostBox.PlaceholderText" xml:space="preserve">
+    <value>192.168.0.10</value>
+  </data>
+  <data name="Sync_Connect.Content" xml:space="preserve">
+    <value>接続</value>
+  </data>
+  <data name="Sync_Pin.Header" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Sync_Pin.Description" xml:space="preserve">
+    <value>Android の同期画面に出ている 6 桁の番号</value>
+  </data>
+  <data name="Sync_PinBox.PlaceholderText" xml:space="preserve">
+    <value>000000</value>
+  </data>
+  <data name="Sync_PairButton.Content" xml:space="preserve">
+    <value>ペアリング</value>
+  </data>
+  <data name="Sync_SectionTarget.Text" xml:space="preserve">
+    <value>同期する対象</value>
+  </data>
+  <data name="Sync_Extensions.Header" xml:space="preserve">
+    <value>拡張子</value>
+  </data>
+  <data name="Sync_Folders.Header" xml:space="preserve">
+    <value>フォルダ</value>
+  </data>
+  <data name="Sync_Playlists.Header" xml:space="preserve">
+    <value>プレイリスト</value>
+  </data>
+  <data name="Sync_SectionRun.Text" xml:space="preserve">
+    <value>実行</value>
+  </data>
+  <data name="Sync_Compare.Text" xml:space="preserve">
+    <value>比較</value>
+  </data>
+  <data name="Sync_Start.Text" xml:space="preserve">
+    <value>同期開始</value>
+  </data>
+  <data name="Sync_DeleteList.Header" xml:space="preserve">
+    <value>削除候補</value>
+  </data>
+  <data name="Sync_DeleteList.Description" xml:space="preserve">
+    <value>PC に無い曲（チェックしたときだけ削除）</value>
+  </data>
+  <data name="Sync_DeleteCheck.Content" xml:space="preserve">
+    <value>削除する</value>
+  </data>
+  <data name="Sync_DeleteHeaderFormat" xml:space="preserve">
+    <value>削除候補（{0} 件）</value>
+  </data>
+  <data name="Sync_DeleteChoiceTitle" xml:space="preserve">
+    <value>Android の削除候補</value>
+  </data>
+  <data name="Sync_DeleteChoiceMessage" xml:space="preserve">
+    <value>PC にないファイルが Android に {0} 個あります。削除すると元に戻せません。</value>
+  </data>
+  <data name="Sync_DeleteChoiceDelete" xml:space="preserve">
+    <value>削除して同期</value>
+  </data>
+  <data name="Sync_DeleteChoiceKeep" xml:space="preserve">
+    <value>削除せずに同期</value>
+  </data>
+  <data name="Sync_Reconnecting" xml:space="preserve">
+    <value>つながらないため、端末を探し直しています…</value>
+  </data>
+  <data name="Sync_NotFoundHint" xml:space="preserve">
+    <value>Android の同期画面で受信待機がオンになっているか確認してください。</value>
+  </data>
+  <data name="Sync_SummaryFormat" xml:space="preserve">
+    <value>追加 {0}・上書き {1}・変更なし {2}・削除候補 {3}（転送 {4}・プレイリスト {5}）</value>
+  </data>
+  <data name="Sync_ProgressFormat" xml:space="preserve">
+    <value>{0} / {1} 曲（{2} / {3}）</value>
+  </data>
+  <data name="Sync_ItemCountFormat" xml:space="preserve">
+    <value>{0}（{1:N0}）</value>
+  </data>
+  <data name="Sync_MoreFormat" xml:space="preserve">
+    <value>ほか {0} 件</value>
+  </data>
+  <data name="Sync_RootFolder" xml:space="preserve">
+    <value>（直下）</value>
+  </data>
+  <data name="Sync_Searching" xml:space="preserve">
+    <value>検索中…</value>
+  </data>
+  <data name="Sync_NotFound" xml:space="preserve">
+    <value>見つかりませんでした。Android で受信待機をオンにして、同じネットワークにつないでください。</value>
+  </data>
+  <data name="Sync_FoundFormat" xml:space="preserve">
+    <value>{0} 台見つかりました</value>
+  </data>
+  <data name="Sync_ConnectFailed" xml:space="preserve">
+    <value>接続できませんでした。Android で受信待機がオンになっているか確認してください。</value>
+  </data>
+  <data name="Sync_NeedPair" xml:space="preserve">
+    <value>ペアリングが必要です。PIN を入力してください。</value>
+  </data>
+  <data name="Sync_PairFailed" xml:space="preserve">
+    <value>ペアリングできませんでした。PIN を確認してください。</value>
+  </data>
+  <data name="Sync_Paired" xml:space="preserve">
+    <value>ペアリングしました</value>
+  </data>
+  <data name="Sync_NoDevice" xml:space="preserve">
+    <value>接続先を選んでください</value>
+  </data>
+  <data name="Sync_Comparing" xml:space="preserve">
+    <value>比較中…</value>
+  </data>
+  <data name="Sync_Done" xml:space="preserve">
+    <value>同期が完了しました</value>
+  </data>
+  <data name="Sync_Canceled" xml:space="preserve">
+    <value>キャンセルしました</value>
+  </data>
+  <data name="Sync_ErrorFormat" xml:space="preserve">
+    <value>エラー: {0}</value>
   </data>
 </root>

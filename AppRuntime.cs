@@ -45,7 +45,8 @@ namespace MusicPlayer
             var library = new LibraryService(settings, _uiDispatcher);
             var playback = new PlaybackService(_uiDispatcher, settings);
             var playlists = new PlaylistService(settings, library);
-            _appState = new AppState(settings, library, playback, playlists);
+            var sync = new AndroidSyncService(settings, library, playlists);
+            _appState = new AppState(settings, library, playback, playlists, sync);
         }
 
         public AppState AppState => _appState;
@@ -258,6 +259,7 @@ namespace MusicPlayer
             _systemEventWindow = null;
 
             try { _appState.Playback.Dispose(); } catch { }
+            try { _appState.Sync.Dispose(); } catch { }
             // 音量など、操作のたびには保存していない値をここで書き出す
             _settings.Save();
 

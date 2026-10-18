@@ -49,22 +49,35 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <!-- 編集系は同じウィンドウ内のページとして切り替える -->
-                <NavigationViewItemHeader x:Uid="Nav_EditHeader" />
-                <NavigationViewItem x:Uid="Nav_TagEditor" Tag="TagEditor">
+                <!-- Android 版への同期（単一項目） -->
+                <NavigationViewItem x:Uid="Nav_Sync" Tag="Sync">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE70F;" />
+                        <FontIcon Glyph="&#xE895;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Nav_CdRip" Tag="CdRip">
+
+                <!-- 編集系は同じウィンドウ内のページとして切り替える。「プレイリスト」と同じくシェブロン・文字の押下で折りたためる -->
+                <NavigationViewItem x:Name="NavItemEdit" x:Uid="Nav_Edit" SelectsOnInvoked="False" IsExpanded="True">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE958;" />
+                        <FontIcon Glyph="&#xE90F;" />
                     </NavigationViewItem.Icon>
-                </NavigationViewItem>
-                <NavigationViewItem x:Uid="Nav_Convert" Tag="Convert">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8AB;" />
-                    </NavigationViewItem.Icon>
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem x:Uid="Nav_TagEditor" Tag="TagEditor">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE70F;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                        <NavigationViewItem x:Uid="Nav_CdRip" Tag="CdRip">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE958;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                        <NavigationViewItem x:Uid="Nav_Convert" Tag="Convert">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE8AB;" />
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                    </NavigationViewItem.MenuItems>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
             <NavigationView.FooterMenuItems>
