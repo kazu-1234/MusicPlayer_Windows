@@ -39,6 +39,11 @@ namespace MusicPlayer.Services
         private List<Track> _tracks = new();
         private Dictionary<string, Track> _byPath = new(StringComparer.OrdinalIgnoreCase);
 
+        // 曲 → アルバム／アーティストの引き当て表（アーティスト名・アルバム名を押してそのページへ飛ぶときに使う）。
+        // 曲のパスと主アーティスト名で引くので、プレイリストが別に読み込んだ Track からでも同じアルバムが見つかる
+        private Dictionary<string, Album> _albumByPath = new(StringComparer.OrdinalIgnoreCase);
+        private Dictionary<string, Artist> _artistByName = new(StringComparer.OrdinalIgnoreCase);
+
         public LibraryService(Settings settings, DispatcherQueue ui)
         {
             _settings = settings;
@@ -141,6 +146,21 @@ namespace MusicPlayer.Services
 
         public Track? FindByPath(string path) =>
             _byPath.TryGetValue(path, out var track) ? track : null;
+
+        /// <summary>曲が入っているアルバム（ライブラリ外の曲なら null）。</summary>
+        public Album? AlbumOf(Track track) =>
+            _albumByPath.TryGetValue(track.Path, out var album) ? album : null;
+
+        /// <summary>名前（主アーティスト名）でアーティストを探す。アルバム詳細のヘッダーのアーティスト名から飛ぶのに使う。</summary>
+        public Artist? FindArtist(string name) =>
+            _artistByName.TryGetValue(name, out var artist) ? artist : null;
+
+        /// <summary>
+        /// 曲のアーティストのページ（ライブラリ外の曲なら null）。
+        /// アーティスト一覧は主アーティスト（「AI Feat. カンナ」なら AI）でまとめているので、ライブラリ側の曲の PrimaryArtist で引く。
+        /// </summary>
+        public Artist? ArtistOf(Track track) =>
+            FindByPath(track.Path) is { } known && _artistByName.TryGetValue(known.PrimaryArtist, out var artist) ? artist : null;
 
         /// <summary>
         /// ライブラリにあればその情報を、無ければファイルからタグを読んで返す
@@ -313,6 +333,8 @@ namespace MusicPlayer.Services
                 {
                     _tracks = built.Tracks;
                     _byPath = built.ByPath;
+                    _albumByPath = built.AlbumByPath;
+                    _artistByName = built.ArtistByName;
                     Albums = built.Albums;
                     Artists = built.Artists;
                     Formats = built.Formats;
@@ -333,7 +355,8 @@ namespace MusicPlayer.Services
                 await done.Task;
         }
 
-        private static (List<Track> Tracks, Dictionary<string, Track> ByPath, List<Album> Albums, List<Artist> Artists, List<string> Formats)
+        private static (List<Track> Tracks, Dictionary<string, Track> ByPath, List<Album> Albums, List<Artist> Artists, List<string> Formats,
+                        Dictionary<string, Album> AlbumByPath, Dictionary<string, Artist> ArtistByName)
             BuildIndexes(List<Track> tracks)
         {
             // 古いキャッシュなどで読みが無い曲は、ここで作る（並べ替えに必要）
@@ -397,7 +420,16 @@ namespace MusicPlayer.Services
             artists = SortService.Sort(artists, byName);
 
             var formats = sortedTracks.Select(t => t.Format).Distinct().OrderBy(f => f).ToList();
-            return (sortedTracks, byPath, albums, artists, formats);
+
+            // 曲のパス → アルバム、主アーティスト名 → アーティスト の引き当て表
+            var albumByPath = new Dictionary<string, Album>(StringComparer.OrdinalIgnoreCase);
+            foreach (var pair in albumOfTrack)
+                albumByPath[pair.Key.Path] = pair.Value;
+            var artistByName = new Dictionary<string, Artist>(StringComparer.OrdinalIgnoreCase);
+            foreach (var artist in artists)
+                artistByName[artist.Name] = artist;
+
+            return (sortedTracks, byPath, albums, artists, formats, albumByPath, artistByName);
         }
 
         /// <summary>

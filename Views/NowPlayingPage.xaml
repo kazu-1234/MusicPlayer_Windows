@@ -30,10 +30,18 @@
                 </Grid>
                 <TextBlock x:Name="TitleText" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,12,0,0"
                            TextWrapping="Wrap" MaxWidth="320" />
-                <TextBlock x:Name="ArtistText" Style="{StaticResource BodyTextBlockStyle}"
-                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" MaxWidth="320" />
-                <TextBlock x:Name="AlbumText" Style="{StaticResource CaptionTextBlockStyle}"
-                           Foreground="{ThemeResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" MaxWidth="320" />
+                <!-- 2 行目は再生バーと同じく「アーティスト • アルバム」（それぞれ押すとそのページへ） -->
+                <controls:ArtistAlbumLine x:Name="ArtistAlbum" HorizontalAlignment="Left" />
+                <!-- 音源の詳細（年・形式・長さ / サンプルレート等 / ビットレート・サイズ / ロスレスか）。行の文字列はコードビハインドで渡す -->
+                <ItemsControl x:Name="AudioInfoList" Margin="0,12,0,0" MaxWidth="320">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{x:Bind}" Style="{StaticResource CaptionTextBlockStyle}" Margin="0,1"
+                                       Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                       TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
 
             <!-- 右: 再生キュー（再生順） -->
@@ -67,7 +75,8 @@
                                     <controls:TrackArt TrackPath="{x:Bind Track.Path}" />
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                         <TextBlock Text="{x:Bind Track.DisplayTitle}" Style="{StaticResource ListPrimaryTextStyle}" />
-                                        <TextBlock Text="{x:Bind Track.DisplayArtist}" Style="{StaticResource ListSecondaryTextStyle}" FontSize="12" />
+                                        <controls:LinkText Text="{x:Bind Track.DisplayArtist}" TextStyle="{StaticResource ListSecondaryTextStyle}" FontSize="12"
+                                                           Click="ArtistLink_Click" />
                                     </StackPanel>
                                     <TextBlock Grid.Column="2" Text="{x:Bind Track.DurationText}" Style="{StaticResource ListSecondaryTextStyle}" />
                                 </Grid>

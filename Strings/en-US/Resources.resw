@@ -732,4 +732,25 @@ MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
   <data name="Tag_AlbumSort.Header" xml:space="preserve">
     <value>Album (sort)</value>
   </data>
+  <data name="AudioInfo_Lossless" xml:space="preserve">
+    <value>Lossless</value>
+  </data>
+  <data name="AudioInfo_Lossy" xml:space="preserve">
+    <value>Lossy (the file itself is compressed)</value>
+  </data>
+  <data name="AudioInfo_Mono" xml:space="preserve">
+    <value>Mono</value>
+  </data>
+  <data name="AudioInfo_Stereo" xml:space="preserve">
+    <value>Stereo</value>
+  </data>
+  <data name="Settings_DefaultApp.Header" xml:space="preserve">
+    <value>Set as default app</value>
+  </data>
+  <data name="Settings_DefaultApp.Description" xml:space="preserve">
+    <value>Registers this app for music files and opens the Windows default apps page. Choose MusicPlayer for each file type there to play files by double-clicking in File Explorer.</value>
+  </data>
+  <data name="Settings_DefaultAppButton.Content" xml:space="preserve">
+    <value>Register and open</value>
+  </data>
 </root>

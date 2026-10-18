@@ -400,5 +400,21 @@ namespace MusicPlayer.Views
             var items = await e.DataView.GetStorageItemsAsync();
             await AddPathsAsync(items.OfType<StorageFile>().Select(f => f.Path));
         }
+
+        // ───────── アーティスト名・アルバム名のリンク ─────────
+
+        /// <summary>行のアーティスト名を押したら、そのアーティストのページへ。</summary>
+        private void ArtistLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PlaylistEntry item)
+                LibraryNavigation.GoToArtist(Frame, item.Track);
+        }
+
+        /// <summary>行のアルバム名を押したら、そのアルバムのページへ。</summary>
+        private void AlbumLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is PlaylistEntry item)
+                LibraryNavigation.GoToAlbum(Frame, item.Track);
+        }
     }
 }

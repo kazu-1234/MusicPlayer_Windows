@@ -732,4 +732,25 @@ MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
   <data name="Tag_AlbumSort.Header" xml:space="preserve">
     <value>アルバムの読み</value>
   </data>
+  <data name="AudioInfo_Lossless" xml:space="preserve">
+    <value>ロスレス</value>
+  </data>
+  <data name="AudioInfo_Lossy" xml:space="preserve">
+    <value>非可逆圧縮（ファイル自体が圧縮済み）</value>
+  </data>
+  <data name="AudioInfo_Mono" xml:space="preserve">
+    <value>モノラル</value>
+  </data>
+  <data name="AudioInfo_Stereo" xml:space="preserve">
+    <value>ステレオ</value>
+  </data>
+  <data name="Settings_DefaultApp.Header" xml:space="preserve">
+    <value>既定のアプリに設定</value>
+  </data>
+  <data name="Settings_DefaultApp.Description" xml:space="preserve">
+    <value>音楽ファイルを開くアプリとして登録し、Windows の既定のアプリ画面を開きます。そこで拡張子ごとに MusicPlayer を選ぶと、エクスプローラーのダブルクリックで再生できます。</value>
+  </data>
+  <data name="Settings_DefaultAppButton.Content" xml:space="preserve">
+    <value>登録して開く</value>
+  </data>
 </root>

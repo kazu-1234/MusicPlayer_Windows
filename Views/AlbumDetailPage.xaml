@@ -4,6 +4,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:models="using:MusicPlayer.Models"
     xmlns:controls="using:MusicPlayer.Controls">
+    <Page.Resources>
+        <!-- ヘッダーのアーティスト名（大きめ・薄い色） -->
+        <Style x:Key="DetailArtistTextStyle" TargetType="TextBlock" BasedOn="{StaticResource SubtitleTextBlockStyle}">
+            <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}" />
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        </Style>
+    </Page.Resources>
     <Grid Margin="{StaticResource ListPageMargin}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -26,8 +33,8 @@
             </Grid>
             <StackPanel Grid.Column="1" VerticalAlignment="Bottom" Spacing="4">
                 <TextBlock x:Name="TitleText" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="Wrap" />
-                <TextBlock x:Name="ArtistText" Style="{StaticResource SubtitleTextBlockStyle}"
-                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                <!-- アルバムのアーティスト名。押すとそのアーティストのページへ -->
+                <controls:LinkText x:Name="ArtistText" TextStyle="{StaticResource DetailArtistTextStyle}" Click="HeaderArtist_Click" />
                 <TextBlock x:Name="InfoText" Style="{StaticResource CaptionTextBlockStyle}"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                 <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}" Margin="0,12,0,0">
@@ -106,7 +113,7 @@
                                 <controls:TrackArt TrackPath="{x:Bind Path}" />
                                 <TextBlock Grid.Column="1" Text="{x:Bind TrackNumberText}" Style="{StaticResource ListSecondaryTextStyle}" HorizontalAlignment="Right" />
                                 <TextBlock Grid.Column="2" Text="{x:Bind DisplayTitle}" Style="{StaticResource ListPrimaryTextStyle}" />
-                                <TextBlock Grid.Column="3" Text="{x:Bind DisplayArtist}" Style="{StaticResource ListSecondaryTextStyle}" />
+                                <controls:LinkText Grid.Column="3" Text="{x:Bind DisplayArtist}" TextStyle="{StaticResource ListSecondaryTextStyle}" Click="ArtistLink_Click" />
                                 <TextBlock Grid.Column="4" Text="{x:Bind AddedText}" Style="{StaticResource ListSecondaryTextStyle}" />
                                 <TextBlock Grid.Column="5" Text="{x:Bind DurationText}" Style="{StaticResource ListSecondaryTextStyle}" />
                             </Grid>

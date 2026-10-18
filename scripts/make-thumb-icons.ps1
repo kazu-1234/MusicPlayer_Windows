@@ -1,6 +1,9 @@
 ﻿# タスクバーのプレビューに出すボタン（前へ／再生／一時停止／次へ）のアイコンを作る。
 # Segoe Fluent Icons（Windows 11 標準のアイコン用フォント）のグリフを 16px と 32px の画像にして、
 # 1 つの .ico（PNG 入り）にまとめて Assets\ に保存する。生成した .ico は git に入れるので、普段は実行不要。
+# タスクバーの色（Windows モード）に合わせて 2 組作る:
+#   Thumb*.ico      … 白で描く（ダークのタスクバー用）
+#   Thumb*Light.ico … 黒で描く（ライトのタスクバー用）。どちらを使うかはアプリ（TaskbarThumbButtons.cs）が選ぶ
 # 使い方: powershell -ExecutionPolicy Bypass -File scripts\make-thumb-icons.ps1
 
 Add-Type -AssemblyName System.Drawing
@@ -16,8 +19,8 @@ $icons = [ordered]@{
     "ThumbNext.ico"     = 0xE893
 }
 
-# 1 サイズ分の PNG を作る（タスクバーは暗い色なので白で描く）
-function New-GlyphPng([int]$glyph, [int]$size) {
+# 1 サイズ分の PNG を作る。$brush はグリフの色（白 = ダーク用 / 黒 = ライト用）
+function New-GlyphPng([int]$glyph, [int]$size, $brush) {
     $bmp = New-Object Drawing.Bitmap $size, $size, ([Drawing.Imaging.PixelFormat]::Format32bppArgb)
     $g = [Drawing.Graphics]::FromImage($bmp)
     $g.TextRenderingHint = [Drawing.Text.TextRenderingHint]::AntiAliasGridFit
@@ -28,16 +31,26 @@ function New-GlyphPng([int]$glyph, [int]$size) {
     $format.Alignment = [Drawing.StringAlignment]::Center
     $format.LineAlignment = [Drawing.StringAlignment]::Center
     $rect = New-Object Drawing.RectangleF 0, 0, $size, $size
-    $g.DrawString([string][char]$glyph, $font, [Drawing.Brushes]::White, $rect, $format)
+    $g.DrawString([string][char]$glyph, $font, $brush, $rect, $format)
     $g.Dispose(); $font.Dispose()
     $ms = New-Object IO.MemoryStream
     $bmp.Save($ms, [Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
     return ,$ms.ToArray()
 }
 
-foreach ($name in $icons.Keys) {
+# 出力する組: ファイル名の後ろに付ける文字 → 色
+$variants = [ordered]@{
+    ""      = [Drawing.Brushes]::White
+    "Light" = [Drawing.Brushes]::Black
+}
+
+foreach ($suffix in $variants.Keys) {
+foreach ($baseName in $icons.Keys) {
+    $brush = $variants[$suffix]
+    # ThumbPlay.ico → ThumbPlayLight.ico のように、拡張子の前に付ける
+    $name = [IO.Path]::GetFileNameWithoutExtension($baseName) + $suffix + ".ico"
     $sizes = 16, 32
-    $pngs = $sizes | ForEach-Object { ,(New-GlyphPng $icons[$name] $_) }
+    $pngs = $sizes | ForEach-Object { ,(New-GlyphPng $icons[$baseName] $_ $brush) }
 
     # ICO 形式: ヘッダー(6 byte) + 画像ごとの目録(16 byte) + 画像データ（ここでは PNG をそのまま入れる）
     $ms = New-Object IO.MemoryStream
@@ -56,4 +69,5 @@ foreach ($name in $icons.Keys) {
     $w.Flush()
     [IO.File]::WriteAllBytes((Join-Path $assets $name), $ms.ToArray())
     "作成: $name"
+}
 }

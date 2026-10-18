@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 
 namespace MusicPlayer
@@ -34,6 +37,12 @@ namespace MusicPlayer
 
         private static string ExitSignalFilePath => Path.Combine(AppDataDirectory, ".exit_signal");
 
+        /// <summary>2 つ目のプロセスが「このファイルを開いて」と頼むときに、パスを 1 行 1 件で書くファイル。</summary>
+        private static string OpenRequestFilePath => Path.Combine(AppDataDirectory, ".open_request");
+
+        /// <summary>.open_request の読み書きを、複数プロセス（複数選択で同時に起動される）の間で順番にするための名前付き Mutex。</summary>
+        private const string OpenRequestMutexName = MutexName + "_OpenRequest";
+
         public static EventWaitHandle? InteractiveShowEvent => _interactiveShowEvent;
         public static EventWaitHandle? ExitEvent => _exitEvent;
 
@@ -51,6 +60,10 @@ namespace MusicPlayer
 
                 return false;
             }
+
+            // 前回が異常終了して残った「開く」依頼は捨てる（今回の起動と関係ない曲が再生されないように）。
+            // イベントを作る前に消すので、これから届く依頼を消してしまうことはない
+            try { File.Delete(OpenRequestFilePath); } catch { }
 
             _interactiveShowEvent = new EventWaitHandle(
                 false,
@@ -113,6 +126,65 @@ namespace MusicPlayer
             }
             catch (WaitHandleCannotBeOpenedException)
             {
+            }
+        }
+
+        /// <summary>
+        /// 既存インスタンスへ「このファイルを再生して」と頼む（エクスプローラーから開いたとき）。
+        /// パスはファイルに追記し、表示イベントで起こす。受け取った側は表示ついでに TryConsumeOpenRequest で読む。
+        /// </summary>
+        public static void SignalOpenFiles(IReadOnlyList<string> paths)
+        {
+            try
+            {
+                Directory.CreateDirectory(AppDataDirectory);
+                WithOpenRequestLock(() => File.AppendAllLines(OpenRequestFilePath, paths, new UTF8Encoding(false)));
+            }
+            catch
+            {
+            }
+
+            SignalInteractiveShow();
+        }
+
+        /// <summary>開く依頼のパスがあれば読み取ってファイルを消す。無ければ空。</summary>
+        public static IReadOnlyList<string> TryConsumeOpenRequest()
+        {
+            if (!File.Exists(OpenRequestFilePath))
+                return Array.Empty<string>();
+
+            try
+            {
+                string[] lines = Array.Empty<string>();
+                WithOpenRequestLock(() =>
+                {
+                    lines = File.ReadAllLines(OpenRequestFilePath, Encoding.UTF8);
+                    File.Delete(OpenRequestFilePath);
+                });
+                return lines.Where(l => l.Length > 0).ToList();
+            }
+            catch
+            {
+                return Array.Empty<string>();
+            }
+        }
+
+        /// <summary>書き込み途中のファイルを読んだり、2 つのプロセスが同時に追記したりしないよう Mutex で囲む。</summary>
+        private static void WithOpenRequestLock(Action action)
+        {
+            using var mutex = new Mutex(false, OpenRequestMutexName);
+            bool owned = false;
+            try
+            {
+                // 相手の処理は一瞬なので長くは待たない。取れなくても処理は進める（最悪でも 1 件取りこぼすだけ）
+                try { owned = mutex.WaitOne(2000); }
+                catch (AbandonedMutexException) { owned = true; }
+                action();
+            }
+            finally
+            {
+                if (owned)
+                    mutex.ReleaseMutex();
             }
         }
 

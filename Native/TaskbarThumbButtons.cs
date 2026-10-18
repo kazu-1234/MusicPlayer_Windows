@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace MusicPlayer.Native
 {
@@ -21,7 +22,16 @@ namespace MusicPlayer.Native
         private readonly Action<Button> _onClick;
         private readonly SubclassProc _proc; // GC に回収されないよう、デリゲートをフィールドで持ち続ける
         private readonly uint _taskbarCreatedMsg;
-        private readonly IntPtr _iconPrev, _iconPlay, _iconPause, _iconNext;
+        /// <summary>
+        /// ボタンのアイコン 4 個（前へ／再生／一時停止／次へ）の 1 組。
+        /// タスクバーの色に合わせて、白で描いた組（ダーク用）と黒で描いた組（ライト用）を持つ。
+        /// </summary>
+        private readonly record struct IconSet(IntPtr Prev, IntPtr Play, IntPtr Pause, IntPtr Next);
+
+        private readonly IconSet _darkIcons, _lightIcons;
+
+        /// <summary>タスクバーがライトか（Windows の設定「Windows モード」）。ライトなら黒いアイコンを使う。</summary>
+        private bool _taskbarLight;
         private ITaskbarList3? _taskbar;
         private bool _added;
         private bool _playing;
@@ -38,11 +48,9 @@ namespace MusicPlayer.Native
             _onClick = onClick;
             (_tipPrevious, _tipPlay, _tipPause, _tipNext) = (tipPrevious, tipPlay, tipPause, tipNext);
 
-            string dir = Path.Combine(AppContext.BaseDirectory, "Assets");
-            _iconPrev = LoadIcon(Path.Combine(dir, "ThumbPrevious.ico"));
-            _iconPlay = LoadIcon(Path.Combine(dir, "ThumbPlay.ico"));
-            _iconPause = LoadIcon(Path.Combine(dir, "ThumbPause.ico"));
-            _iconNext = LoadIcon(Path.Combine(dir, "ThumbNext.ico"));
+            _darkIcons = LoadIconSet("");
+            _lightIcons = LoadIconSet("Light");
+            _taskbarLight = IsTaskbarLight();
 
             // タスクバーのボタンが作られた（エクスプローラーの再起動時にも来る）ことを知らせるメッセージ。
             // これを受けてからでないと ThumbBarAddButtons は失敗する
@@ -71,6 +79,19 @@ namespace MusicPlayer.Native
                     _added = false;
                     Apply(add: true);
                 }
+                else if (msg == WM_SETTINGCHANGE && lParam != IntPtr.Zero
+                         && Marshal.PtrToStringUni(lParam) == "ImmersiveColorSet")
+                {
+                    // Windows のライト／ダークが切り替わった（lParam が "ImmersiveColorSet" の WM_SETTINGCHANGE が来る）。
+                    // タスクバーの色が変わったときだけアイコンを差し替える
+                    bool light = IsTaskbarLight();
+                    if (light != _taskbarLight)
+                    {
+                        _taskbarLight = light;
+                        if (_added)
+                            Apply(add: false);
+                    }
+                }
                 else if (msg == WM_COMMAND && HiWord(wParam) == THBN_CLICKED)
                 {
                     _onClick((Button)LoWord(wParam));
@@ -93,11 +114,13 @@ namespace MusicPlayer.Native
                 _taskbar.HrInit();
 
             uint flags = _enabled ? THBF_ENABLED : THBF_DISABLED;
+            // ライトのタスクバーは背景が白っぽいので黒いアイコン、ダークは白いアイコン
+            var icons = _taskbarLight ? _lightIcons : _darkIcons;
             var buttons = new[]
             {
-                MakeButton(Button.Previous, _iconPrev, _tipPrevious, flags),
-                MakeButton(Button.PlayPause, _playing ? _iconPause : _iconPlay, _playing ? _tipPause : _tipPlay, flags),
-                MakeButton(Button.Next, _iconNext, _tipNext, flags)
+                MakeButton(Button.Previous, icons.Prev, _tipPrevious, flags),
+                MakeButton(Button.PlayPause, _playing ? icons.Pause : icons.Play, _playing ? _tipPause : _tipPlay, flags),
+                MakeButton(Button.Next, icons.Next, _tipNext, flags)
             };
 
             int hr = add && !_added
@@ -116,6 +139,35 @@ namespace MusicPlayer.Native
             dwFlags = flags
         };
 
+        /// <summary>Assets のアイコン 1 組を読む。suffix は "" （白・ダーク用）か "Light"（黒・ライト用）。</summary>
+        private static IconSet LoadIconSet(string suffix)
+        {
+            string dir = Path.Combine(AppContext.BaseDirectory, "Assets");
+            return new IconSet(
+                LoadIcon(Path.Combine(dir, $"ThumbPrevious{suffix}.ico")),
+                LoadIcon(Path.Combine(dir, $"ThumbPlay{suffix}.ico")),
+                LoadIcon(Path.Combine(dir, $"ThumbPause{suffix}.ico")),
+                LoadIcon(Path.Combine(dir, $"ThumbNext{suffix}.ico")));
+        }
+
+        /// <summary>
+        /// タスクバーがライトか。設定 → 個人用設定 → 色 の「Windows モード」の値（SystemUsesLightTheme: 1 = ライト）。
+        /// アプリのテーマ（AppsUseLightTheme / アプリ内の設定）とは別物で、タスクバーやプレビューの背景はこちらに従う。
+        /// 読めないとき（古い Windows など）はダーク扱い（従来どおり白いアイコン）。
+        /// </summary>
+        private static bool IsTaskbarLight()
+        {
+            try
+            {
+                using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+                return key?.GetValue("SystemUsesLightTheme") is int value && value == 1;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private static IntPtr LoadIcon(string path) =>
             File.Exists(path) ? LoadImage(IntPtr.Zero, path, IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE) : IntPtr.Zero;
 
@@ -125,7 +177,8 @@ namespace MusicPlayer.Native
                 return;
             _disposed = true;
             RemoveWindowSubclass(_hwnd, _proc, SubclassId);
-            foreach (var icon in new[] { _iconPrev, _iconPlay, _iconPause, _iconNext })
+            foreach (var set in new[] { _darkIcons, _lightIcons })
+            foreach (var icon in new[] { set.Prev, set.Play, set.Pause, set.Next })
             {
                 if (icon != IntPtr.Zero)
                     DestroyIcon(icon);
@@ -141,6 +194,7 @@ namespace MusicPlayer.Native
 
         private static readonly UIntPtr SubclassId = (UIntPtr)0x4D50; // このサブクラスを見分ける任意の番号
         private const uint WM_COMMAND = 0x0111;
+        private const uint WM_SETTINGCHANGE = 0x001A;
         private const int THBN_CLICKED = 0x1800;
         private const uint THB_ICON = 0x2, THB_TOOLTIP = 0x4, THB_FLAGS = 0x8;
         private const uint THBF_ENABLED = 0x0, THBF_DISABLED = 0x1;

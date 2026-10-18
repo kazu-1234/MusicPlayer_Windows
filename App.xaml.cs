@@ -1,6 +1,9 @@
 using Microsoft.UI.Xaml;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MusicPlayer
@@ -67,15 +70,33 @@ namespace MusicPlayer
             foreach (var spec in new[] { settings.SongsSort, settings.AlbumsSort, settings.ArtistsSort })
                 spec.NameMode ??= settings.NameSortMode;
 
-            if (!SingleInstanceManager.TryBecomePrimaryInstance(requestInteractiveShow: true))
+            // エクスプローラーのダブルクリック（既定のアプリ）で起動されると、引数に音声ファイルのパスが入る
+            var openFiles = GetAudioFileArgs();
+
+            // 開くファイルがあるときは、パスを書いてから表示依頼を送る（先に起こすと、相手がまだ空のファイルを読んでしまう）
+            if (!SingleInstanceManager.TryBecomePrimaryInstance(requestInteractiveShow: openFiles.Count == 0))
             {
-                // 既に起動中のインスタンスへ表示依頼を送ったので、このプロセスは何もせず終了する
+                if (openFiles.Count > 0)
+                    SingleInstanceManager.SignalOpenFiles(openFiles);
+                // 既に起動中のインスタンスへ依頼を送ったので、このプロセスは何もせず終了する
                 Exit();
                 return;
             }
 
             _runtime = new AppRuntime(this, settings);
-            _runtime.Start(launchInBackground: false, requestInteractiveShow: true);
+            _runtime.Start(launchInBackground: false, requestInteractiveShow: true, openFiles);
         }
+
+        /// <summary>
+        /// コマンドライン引数から、存在する音声ファイルのパスだけを取り出す。
+        /// 非パッケージアプリでは LaunchActivatedEventArgs.Arguments が空になることがあるため、Environment から読む
+        /// （先頭の要素は exe 自身のパスなので飛ばす）。
+        /// </summary>
+        private static List<string> GetAudioFileArgs() =>
+            Environment.GetCommandLineArgs()
+                .Skip(1)
+                .Where(a => !a.StartsWith("--", StringComparison.Ordinal))
+                .Where(a => Services.LibraryService.IsAudioFile(a) && File.Exists(a))
+                .ToList();
     }
 }

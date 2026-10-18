@@ -104,6 +104,12 @@ namespace MusicPlayer
         /// <summary>再生バーの 2 行目（アーティスト • アルバム）の文字サイズ。</summary>
         public const double PlayerBarArtistFontSize = 14;
 
+        /// <summary>
+        /// 再生バー・再生中画面の「アーティスト • アルバム」の行で、アーティスト名が使える幅の上限（行全体に対する割合）。
+        /// アーティスト名が長くてもアルバム名が見えるようにするため。
+        /// </summary>
+        public const double ArtistLinkMaxWidthRatio = 0.5;
+
         /// <summary>再生バー中央の再生／一時停止ボタンの直径。</summary>
         public const double PlayerBarPlayButtonSize = 50;
 
@@ -130,6 +136,15 @@ namespace MusicPlayer
         /// <summary>アルバム詳細画面のジャケットの一辺。</summary>
         public const double DetailArtSize = 200;
 
+        /// <summary>「戻る」で元のスクロール位置に戻すために覚えておく位置の最大数（超えたら忘れて覚え直す）。</summary>
+        public const int ScrollMemoryMaxEntries = 200;
+
+        /// <summary>
+        /// 戻ったときにスクロール位置を戻す処理で、一覧の配置が終わるのを待つ最大回数（UI の処理 1 回分ずつ待つ）。
+        /// 一覧が大きく配置に時間がかかっても位置が戻るよう、少し余裕を持たせる。
+        /// </summary>
+        public const int ScrollRestoreRetries = 20;
+
         /// <summary>プレイリスト・再生キューの「元に戻す（Ctrl+Z）」で遡れる回数。</summary>
         public const int UndoHistoryLimit = 20;
 
@@ -155,6 +170,12 @@ namespace MusicPlayer
 
         /// <summary>音量の初期値（0〜100）。</summary>
         public const double DefaultVolume = 70;
+
+        /// <summary>
+        /// エクスプローラーから開いたファイルを、この時間（ミリ秒）だけ待って溜めてからまとめて再生する。
+        /// 複数選択で開くと 1 ファイルずつ別プロセスが起動して少しずつ遅れて届くため、1 つのキューにまとめるのに使う。
+        /// </summary>
+        public const int OpenFilesCollectMs = 400;
 
         // ───────── 変換（ffmpeg） ─────────
 

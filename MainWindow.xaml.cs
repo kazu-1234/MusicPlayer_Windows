@@ -61,6 +61,9 @@ namespace MusicPlayer
             AppWindow.Changed += AppWindow_Changed;
             ContentFrame.NavigationFailed += ContentFrame_NavigationFailed;
             ContentFrame.Navigated += ContentFrame_Navigated;
+            // 再生バーのアーティスト名・アルバム名を押したら、そのページへ
+            PlayerBar.ArtistRequested += track => Views.LibraryNavigation.GoToArtist(ContentFrame, track);
+            PlayerBar.AlbumRequested += track => Views.LibraryNavigation.GoToAlbum(ContentFrame, track);
 
             ConfigureMinimumWindowSize();
             SetUpBackForwardInput();

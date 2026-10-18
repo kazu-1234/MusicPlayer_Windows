@@ -36,6 +36,12 @@ namespace MusicPlayer.Controls
         /// <summary>左側の曲情報がクリックされた（MainWindow が再生中画面へ移動する）。</summary>
         public event EventHandler? NowPlayingRequested;
 
+        /// <summary>アーティスト名が押された（MainWindow がそのアーティストのページへ移動する）。</summary>
+        public event Action<Track>? ArtistRequested;
+
+        /// <summary>アルバム名が押された（MainWindow がそのアルバムのページへ移動する）。</summary>
+        public event Action<Track>? AlbumRequested;
+
         public PlayerBar()
         {
             InitializeComponent();
@@ -48,6 +54,8 @@ namespace MusicPlayer.Controls
             A11y.Label(MuteButton, Strings.Get("Player_Mute"));
             A11y.Label(NowPlayingButton, Strings.Get("Player_OpenNowPlaying"));
             ApplySizes();
+            ArtistAlbum.ArtistClick += track => ArtistRequested?.Invoke(track);
+            ArtistAlbum.AlbumClick += track => AlbumRequested?.Invoke(track);
 
             // Slider は内部でポインター操作を処理済み（Handled）にするため、handledEventsToo で受け取る
             SeekSlider.AddHandler(PointerPressedEvent, new PointerEventHandler((_, _) => _seekDragging = true), true);
@@ -76,7 +84,8 @@ namespace MusicPlayer.Controls
             TrackTextPanel.MaxWidth = AppConfig.PlayerBarTextMaxWidth;
 
             TitleText.FontSize = AppConfig.PlayerBarTitleFontSize;
-            ArtistText.FontSize = AppConfig.PlayerBarArtistFontSize;
+            ArtistAlbum.FontSize = AppConfig.PlayerBarArtistFontSize;
+            ArtistAlbum.LineMaxWidth = AppConfig.PlayerBarTextMaxWidth;
 
             PlayPauseButton.Width = PlayPauseButton.Height = AppConfig.PlayerBarPlayButtonSize;
             PlayPauseButton.CornerRadius = new CornerRadius(AppConfig.PlayerBarPlayButtonSize / 2);
@@ -123,8 +132,8 @@ namespace MusicPlayer.Controls
         {
             Track? track = _playback?.CurrentTrack;
             TitleText.Text = track?.DisplayTitle ?? "";
-            // WMP と同じく 2 行目は「アーティスト • アルバム」
-            ArtistText.Text = track == null ? "" : $"{track.DisplayArtist} • {track.DisplayAlbum}";
+            // WMP と同じく 2 行目は「アーティスト • アルバム」（それぞれ押せる）
+            ArtistAlbum.Track = track;
             SeekSlider.IsEnabled = track != null;
             ArtImage.Source = null;
 

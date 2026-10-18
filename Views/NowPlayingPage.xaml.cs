@@ -47,6 +47,9 @@ namespace MusicPlayer.Views
             InitializeComponent();
             ArtHost.Width = ArtHost.Height = AppConfig.NowPlayingArtSize;
             QueueList.ItemsSource = _queue;
+            ArtistAlbum.LineMaxWidth = AppConfig.NowPlayingArtSize;
+            ArtistAlbum.ArtistClick += track => LibraryNavigation.GoToArtist(Frame, track);
+            ArtistAlbum.AlbumClick += track => LibraryNavigation.GoToAlbum(Frame, track);
             UndoKeys.Attach(this, UndoQueue, RedoQueue);
         }
 
@@ -123,17 +126,27 @@ namespace MusicPlayer.Views
         {
             Track? track = _state.Playback.CurrentTrack;
             TitleText.Text = track?.DisplayTitle ?? "";
-            ArtistText.Text = track?.DisplayArtist ?? "";
-            AlbumText.Text = track?.DisplayAlbum ?? "";
+            // 再生バー（PlayerBar）と同じ「アーティスト • アルバム」の形式にそろえる（それぞれ押せる）
+            ArtistAlbum.Track = track;
             ArtImage.Source = null;
+            AudioInfoList.ItemsSource = null;
             SyncSelection();
 
             if (track == null)
                 return;
 
+            // 詳細はファイルを開いて読むので別スレッドで。ジャケットの読み込みと並行して進める
+            var infoTask = Task.Run(() => AudioInfoService.Read(track));
+
             string? art = await ArtworkCache.GetOrCreateAsync(ArtworkCache.KeyFor(track.Path), track.Path);
             if (art != null && ReferenceEquals(track, _state.Playback.CurrentTrack))
                 ArtImage.Source = new BitmapImage(new Uri(art)) { DecodePixelWidth = (int)AppConfig.ArtworkCacheSize };
+
+            var info = await infoTask;
+            // 待っている間に次の曲へ進んでいたら古い曲の詳細は出さない
+            if (!ReferenceEquals(track, _state.Playback.CurrentTrack))
+                return;
+            AudioInfoList.ItemsSource = AudioInfoService.FormatLines(info);
         }
 
         /// <summary>キューの中の再生中の行を選択状態にして、見える位置までスクロールする。</summary>
@@ -154,6 +167,13 @@ namespace MusicPlayer.Views
 
             if (e.ClickedItem is QueueEntry entry)
                 _state.Playback.JumpToPlayOrderIndex(_queue.IndexOf(entry));
+        }
+
+        /// <summary>キューの行のアーティスト名を押したら、そのアーティストのページへ。</summary>
+        private void ArtistLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is QueueEntry entry)
+                LibraryNavigation.GoToArtist(Frame, entry.Track);
         }
 
         /// <summary>右クリックで「キューから削除」。</summary>

@@ -14,7 +14,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <WindowsPackageType>None</WindowsPackageType>
     <ApplicationDefaultLanguage>ja-JP</ApplicationDefaultLanguage>
-    <Version>1.2.0</Version>
+    <Version>1.4.0</Version>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <DefineConstants>DISABLE_XAML_GENERATED_MAIN;DISABLE_XAML_GENERATED_BREAK_ON_UNHANDLED_EXCEPTION</DefineConstants>
   </PropertyGroup>

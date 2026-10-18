@@ -46,7 +46,17 @@ namespace MusicPlayer.Views
             AttachSortMenu();
             ApplyFilter();
             UpdateScanState();
+            // アルバム・アーティストを開いて「戻る」で帰ってきたら、開く前のスクロール位置に戻す
+            ScrollMemory.Restore(this, e, null, CurrentView, CurrentList);
         }
+
+        /// <summary>今表示している一覧（曲／アルバム／アーティスト）。</summary>
+        private ListViewBase CurrentList => CurrentView switch
+        {
+            "Songs" => SongsList,
+            "Artists" => ArtistsGrid,
+            _ => AlbumsGrid
+        };
 
         // ───────── 並べ替え ─────────
 
@@ -107,6 +117,7 @@ namespace MusicPlayer.Views
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             base.OnNavigatedFrom(e);
+            ScrollMemory.Save(this, null, CurrentView, CurrentList);
             // キャッシュされたページでも、表示していない間は更新を受けない（無駄な再描画を避ける）
             _state.Library.Changed -= Library_Changed;
             _state.Library.ScanStateChanged -= UpdateScanState;
@@ -282,6 +293,22 @@ namespace MusicPlayer.Views
                     .ShowAt(ArtistsGrid, new Microsoft.UI.Xaml.Controls.Primitives.FlyoutShowOptions { Position = e.GetPosition(ArtistsGrid) });
                 e.Handled = true;
             }
+        }
+
+        // ───────── アーティスト名・アルバム名のリンク ─────────
+
+        /// <summary>行のアーティスト名を押したら、そのアーティストのページへ。</summary>
+        private void ArtistLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is Track item)
+                LibraryNavigation.GoToArtist(Frame, item);
+        }
+
+        /// <summary>行のアルバム名を押したら、そのアルバムのページへ。</summary>
+        private void AlbumLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is Track item)
+                LibraryNavigation.GoToAlbum(Frame, item);
         }
     }
 }

@@ -8,7 +8,7 @@ chcp 65001 | Out-Null
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
-$version = "1.2.0"
+$version = "1.4.0"
 $publishDir = Join-Path $root "dist\folder"
 $iss = Join-Path $root "installer\MusicPlayer.iss"
 $outDir = Join-Path $root "dist\installer"

@@ -27,12 +27,15 @@ namespace MusicPlayer.Views
         {
             list.DispatcherQueue.TryEnqueue(Microsoft.UI.Dispatching.DispatcherQueuePriority.Low, () =>
             {
-                if (FindScrollViewer(list) is ScrollViewer viewer)
+                if (FindViewer(list) is ScrollViewer viewer)
                     viewer.ChangeView(null, 0, null, disableAnimation: true);
                 else if (list.Items.Count > 0)
                     list.ScrollIntoView(list.Items[0]);
             });
         }
+
+        /// <summary>一覧（ListView / GridView）がスクロールに使っている ScrollViewer。</summary>
+        public static ScrollViewer? FindViewer(ListViewBase list) => FindScrollViewer(list);
 
         /// <summary>ListView の中の ScrollViewer（テンプレートの中にある）を探す。</summary>
         private static ScrollViewer? FindScrollViewer(DependencyObject parent)

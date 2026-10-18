@@ -3,7 +3,7 @@
 ; 複製時は MyAppName / AppId / URL / アイコンパスを新しいアプリ名に変更すること。
 
 #define MyAppName "MusicPlayer"
-#define MyAppVersion "1.2.0"
+#define MyAppVersion "1.4.0"
 #define MyAppPublisher "kazu-1234"
 #define MyAppURL "https://github.com/kazu-1234/MusicPlayer_Windows"
 #define MyAppExeName "MusicPlayer.exe"
@@ -37,6 +37,8 @@ InfoAfterFile=
 CloseApplications=force
 RestartApplications=no
 UsePreviousAppDir=yes
+; 設定画面の「既定のアプリに設定」で書いた関連付けを、アンインストール時に消したことをエクスプローラーへ知らせる
+ChangesAssociations=yes
 
 [Languages]
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
@@ -113,4 +115,34 @@ begin
       DelTree(ExpandConstant('{app}'), True, True, True);
     end;
   end;
+end;
+
+// アンインストール時: アプリが設定画面から登録した関連付け（HKCU）を消す。値は FileAssociationService.cs と同じ
+procedure RemoveOpenWith(const Ext: String);
+begin
+  RegDeleteValue(HKCU, 'Software\Classes\' + Ext + '\OpenWithProgids', '{#MyAppName}.AudioFile');
+end;
+
+procedure RemoveFileAssociation;
+begin
+  RegDeleteKeyIncludingSubkeys(HKCU, 'Software\Classes\{#MyAppName}.AudioFile');
+  RegDeleteKeyIncludingSubkeys(HKCU, 'Software\{#MyAppName}');
+  RegDeleteValue(HKCU, 'Software\RegisteredApplications', '{#MyAppName}');
+  // 各拡張子の「プログラムから開く」候補からも外す（AppConfig.AudioExtensions と同じ並び）
+  RemoveOpenWith('.flac');
+  RemoveOpenWith('.mp3');
+  RemoveOpenWith('.wav');
+  RemoveOpenWith('.m4a');
+  RemoveOpenWith('.aac');
+  RemoveOpenWith('.ogg');
+  RemoveOpenWith('.opus');
+  RemoveOpenWith('.wma');
+  RemoveOpenWith('.aiff');
+  RemoveOpenWith('.aif');
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+begin
+  if CurUninstallStep = usPostUninstall then
+    RemoveFileAssociation;
 end;

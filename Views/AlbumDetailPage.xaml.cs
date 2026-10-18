@@ -17,6 +17,9 @@ namespace MusicPlayer.Views
         private readonly AppState _state = App.Runtime.AppState;
         private Album? _album;
 
+        /// <summary>表示中のアルバム（同じアルバムへのリンクを押したときに遷移し直さないための判定用）。</summary>
+        public Album? CurrentAlbum => _album;
+
         /// <summary>表示中の曲の並び（見出しで並べ替えた結果）。再生もこの順で行う。</summary>
         private List<Track> _tracks = new();
 
@@ -55,11 +58,20 @@ namespace MusicPlayer.Views
             InfoText.Text = string.Join(" · ", new[] { _album.YearText, _album.Format, _album.SummaryText }.Where(s => s.Length > 0));
             _sort = new SortSpec { Key = SortKey.TrackNumber };
             ShowTracks();
+            // アーティストを開いて「戻る」で帰ってきたら、開く前のスクロール位置に戻す
+            ScrollMemory.Restore(this, e, _album, "Tracks", TracksList);
             // 「…」ボタンはアルバム全曲に対する右クリックメニューと同じ内容
             MoreButton.Flyout = TrackMenu.Create(this, () => _album.Tracks);
 
             await _album.EnsureCoverAsync();
             ArtImage.Source = _album.Cover;
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            if (_album != null)
+                ScrollMemory.Save(this, _album, "Tracks", TracksList);
         }
 
         /// <summary>今の並べ替えで曲一覧を表示し直す。</summary>
@@ -89,6 +101,22 @@ namespace MusicPlayer.Views
         {
             if ((e.OriginalSource as FrameworkElement)?.DataContext is Track track)
                 _state.Playback.PlayTracks(_tracks, _tracks.IndexOf(track));
+        }
+
+        // ───────── アーティスト名・アルバム名のリンク ─────────
+
+        /// <summary>ヘッダーのアーティスト名を押したら、そのアーティストのページへ（「複数のアーティスト」なら何もしない）。</summary>
+        private void HeaderArtist_Click(object sender, RoutedEventArgs e)
+        {
+            if (_album != null)
+                LibraryNavigation.GoToArtist(Frame, _album.Artist);
+        }
+
+        /// <summary>行のアーティスト名を押したら、そのアーティストのページへ。</summary>
+        private void ArtistLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is Track item)
+                LibraryNavigation.GoToArtist(Frame, item);
         }
     }
 }

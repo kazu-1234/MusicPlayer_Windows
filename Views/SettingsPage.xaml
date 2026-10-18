@@ -25,6 +25,14 @@
                               SelectionChanged="ThemeComboBox_SelectionChanged" />
                 </controls:SettingsCard>
 
+                <!-- 既定のアプリ: 押すと Windows に登録し、Windows の既定のアプリ画面を開く -->
+                <controls:SettingsCard x:Uid="Settings_DefaultApp">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8E5;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <Button x:Uid="Settings_DefaultAppButton" Click="DefaultAppButton_Click" />
+                </controls:SettingsCard>
+
                 <!-- ライブラリ・フォルダ -->
                 <TextBlock x:Uid="Settings_SectionLibrary" Style="{StaticResource SettingsSectionHeaderStyle}" />
 

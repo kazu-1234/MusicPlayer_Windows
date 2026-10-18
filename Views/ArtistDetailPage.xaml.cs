@@ -16,6 +16,15 @@ namespace MusicPlayer.Views
         private List<Track> _tracks = new();
         private List<Album> _albums = new();
 
+        /// <summary>表示中のアーティスト（同じアーティストへのリンクを押したときに遷移し直さないための判定用）。</summary>
+        public Artist? CurrentArtist { get; private set; }
+
+        /// <summary>
+        /// アーティストごとに、最後に「曲」タブを見ていたか。ページは開くたびに作り直されるので static に持ち、
+        /// 「戻る」で帰ってきたときに離れたときのタブ（とスクロール位置）に戻すのに使う。
+        /// </summary>
+        private static readonly Dictionary<Artist, bool> LastSongsTab = new();
+
         private static readonly SortKey[] AlbumKeys = { SortKey.Name, SortKey.Year, SortKey.Added };
 
         /// <summary>曲一覧の見出し（押して並べ替え）。並べ替えはライブラリの「曲」と共通の設定を使う。</summary>
@@ -39,6 +48,7 @@ namespace MusicPlayer.Views
             base.OnNavigatedTo(e);
             if (e.Parameter is not Artist artist)
                 return;
+            CurrentArtist = artist;
 
             // ライブラリで形式を絞っていれば、ここでも同じ形式だけを出す（FLAC と MP3 の重複を避ける）
             // （形式が 1 種類しか無いときはフィルタを隠しているので絞らない）
@@ -49,8 +59,23 @@ namespace MusicPlayer.Views
             NameText.Text = artist.Name;
             InitialText.Text = artist.Initial;
             InfoText.Text = Strings.Format("Artist_Summary", _albums.Count, _tracks.Count);
+            // 戻る／進むで来たときは、離れたときのタブにする（新しく開いたときは既定のアルバム）
+            if (e.NavigationMode is NavigationMode.Back or NavigationMode.Forward
+                && LastSongsTab.TryGetValue(artist, out bool songs) && songs)
+                ViewSelector.SelectedItem = SongsTab;
             AttachSortMenu();
             ApplySort();
+            // アルバムを開いて「戻る」で帰ってきたら、開く前のスクロール位置に戻す
+            ScrollMemory.Restore(this, e, artist, ShowingSongs ? "Songs" : "Albums", ShowingSongs ? SongsList : AlbumsGrid);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            if (CurrentArtist == null)
+                return;
+            LastSongsTab[CurrentArtist] = ShowingSongs;
+            ScrollMemory.Save(this, CurrentArtist, ShowingSongs ? "Songs" : "Albums", ShowingSongs ? SongsList : AlbumsGrid);
         }
 
         private bool ShowingSongs => ViewSelector.SelectedItem == SongsTab;
@@ -112,6 +137,15 @@ namespace MusicPlayer.Views
         {
             if ((e.OriginalSource as FrameworkElement)?.DataContext is Track track)
                 _state.Playback.PlayTracks(_tracks, _tracks.IndexOf(track));
+        }
+
+        // ───────── アルバム名のリンク ─────────
+
+        /// <summary>行のアルバム名を押したら、そのアルバムのページへ。</summary>
+        private void AlbumLink_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as FrameworkElement)?.DataContext is Track item)
+                LibraryNavigation.GoToAlbum(Frame, item);
         }
     }
 }

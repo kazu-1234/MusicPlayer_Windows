@@ -127,8 +127,8 @@
                                 <!-- 左端: 曲のジャケット（表示された行だけ非同期で読み込む） -->
                                 <controls:TrackArt TrackPath="{x:Bind Track.Path}" />
                                 <TextBlock Grid.Column="1" Text="{x:Bind Track.DisplayTitle}" Style="{StaticResource ListPrimaryTextStyle}" />
-                                <TextBlock Grid.Column="2" Text="{x:Bind Track.DisplayArtist}" Style="{StaticResource ListSecondaryTextStyle}" />
-                                <TextBlock Grid.Column="3" Text="{x:Bind Track.DisplayAlbum}" Style="{StaticResource ListSecondaryTextStyle}" />
+                                <controls:LinkText Grid.Column="2" Text="{x:Bind Track.DisplayArtist}" TextStyle="{StaticResource ListSecondaryTextStyle}" Click="ArtistLink_Click" />
+                                <controls:LinkText Grid.Column="3" Text="{x:Bind Track.DisplayAlbum}" TextStyle="{StaticResource ListSecondaryTextStyle}" Click="AlbumLink_Click" />
                                 <TextBlock Grid.Column="4" Text="{x:Bind Track.Format}" Style="{StaticResource ListSecondaryTextStyle}" />
                                 <TextBlock Grid.Column="5" Text="{x:Bind Track.AddedText}" Style="{StaticResource ListSecondaryTextStyle}" />
                                 <TextBlock Grid.Column="6" Text="{x:Bind Track.DurationText}" Style="{StaticResource ListSecondaryTextStyle}" />

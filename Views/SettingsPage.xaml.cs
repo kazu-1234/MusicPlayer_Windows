@@ -135,5 +135,12 @@ namespace MusicPlayer.Views
             _state.Settings.Save();
             RefreshFolders();
         }
+
+        /// <summary>
+        /// 音楽ファイルを開くアプリとして登録し、Windows の既定のアプリ画面を開く
+        /// （既定にするかどうかは Windows の仕様上、その画面でユーザーが選ぶ）。
+        /// </summary>
+        private void DefaultAppButton_Click(object sender, RoutedEventArgs e) =>
+            SafeAsync.Run(() => { FileAssociationService.RegisterAndOpenSettings(); return Task.CompletedTask; }, XamlRoot, "DefaultAppButton_Click");
     }
 }

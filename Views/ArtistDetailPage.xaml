@@ -134,7 +134,7 @@
                                 <!-- 左端: 曲のジャケット（表示された行だけ非同期で読み込む） -->
                                 <controls:TrackArt TrackPath="{x:Bind Path}" />
                                 <TextBlock Grid.Column="1" Text="{x:Bind DisplayTitle}" Style="{StaticResource ListPrimaryTextStyle}" />
-                                <TextBlock Grid.Column="2" Text="{x:Bind DisplayAlbum}" Style="{StaticResource ListSecondaryTextStyle}" />
+                                <controls:LinkText Grid.Column="2" Text="{x:Bind DisplayAlbum}" TextStyle="{StaticResource ListSecondaryTextStyle}" Click="AlbumLink_Click" />
                                 <TextBlock Grid.Column="3" Text="{x:Bind Format}" Style="{StaticResource ListSecondaryTextStyle}" />
                                 <TextBlock Grid.Column="4" Text="{x:Bind AddedText}" Style="{StaticResource ListSecondaryTextStyle}" />
                                 <TextBlock Grid.Column="5" Text="{x:Bind DurationText}" Style="{StaticResource ListSecondaryTextStyle}" />
