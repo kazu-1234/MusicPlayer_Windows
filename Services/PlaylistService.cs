@@ -100,10 +100,20 @@ namespace MusicPlayer.Services
                 if (line.StartsWith('#'))
                     continue; // その他の拡張コメントは使わない
 
+                // 再生するのは m3u に書かれたパスの曲だけ（拡張子違いの別ファイルなどに読み替えない）。
+                // さらに、ライブラリ（設定のライブラリフォルダを読み込んだ一覧）に入っている曲だけを再生できる扱いにする。
+                // ライブラリの一覧は前回の走査結果なので、その後に消えたファイルを再生しようとしないよう存在も確かめる
                 string fullPath = ResolvePath(line, baseDir);
                 bool exists = File.Exists(fullPath);
-                Track track = exists ? _library.GetOrRead(fullPath) : TrackFromExtInf(fullPath, pendingExtInf);
-                doc.Entries.Add(new PlaylistEntry(line, pendingExtInf, track, exists));
+                Track? inLibrary = _library.FindByPath(fullPath);
+                Track track;
+                if (inLibrary != null)
+                    track = inLibrary;
+                else if (exists)
+                    track = _library.GetOrRead(fullPath); // ライブラリ外だがファイルはある → タグを読んで表示だけする（グレー）
+                else
+                    track = TrackFromExtInf(fullPath, pendingExtInf); // ファイルも無い → #EXTINF の情報で表示（グレー）
+                doc.Entries.Add(new PlaylistEntry(line, pendingExtInf, track, playable: exists && inLibrary != null));
                 pendingExtInf = null;
             }
 

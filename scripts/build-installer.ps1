@@ -8,7 +8,7 @@ chcp 65001 | Out-Null
 $root = Split-Path -Parent $PSScriptRoot
 Set-Location $root
 
-$version = "1.0.0"
+$version = "1.2.0"
 $publishDir = Join-Path $root "dist\folder"
 $iss = Join-Path $root "installer\MusicPlayer.iss"
 $outDir = Join-Path $root "dist\installer"
@@ -43,7 +43,6 @@ dotnet publish $csproj `
     -p:Platform=x64 `
     -r win-x64 `
     --self-contained true `
-    -p:WindowsAppSDKSelfContained=true `
     -p:PublishSingleFile=false `
     -o $publishDir
 

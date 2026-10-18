@@ -25,12 +25,12 @@ namespace MusicPlayer.Models
     /// </summary>
     public sealed class PlaylistEntry
     {
-        public PlaylistEntry(string rawPath, string? extInfLine, Track track, bool exists)
+        public PlaylistEntry(string rawPath, string? extInfLine, Track track, bool playable)
         {
             RawPath = rawPath;
             ExtInfLine = extInfLine;
             Track = track;
-            IsMissing = !exists;
+            IsMissing = !playable;
         }
 
         /// <summary>m3u に書かれていたパス文字列（相対パスならそのまま）。</summary>
@@ -42,7 +42,10 @@ namespace MusicPlayer.Models
         /// <summary>表示・再生用の曲情報（絶対パス）。</summary>
         public Track Track { get; }
 
-        /// <summary>ファイルが見つからない（一覧で薄く表示する）。</summary>
+        /// <summary>
+        /// 再生できない（一覧で薄く表示し、再生の対象から外す）。
+        /// 書かれたパスにファイルが無いとき、またはファイルはあってもライブラリに入っていないとき。
+        /// </summary>
         public bool IsMissing { get; }
 
         public double RowOpacity => IsMissing ? 0.45 : 1.0;

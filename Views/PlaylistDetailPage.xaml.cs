@@ -88,6 +88,22 @@ namespace MusicPlayer.Views
             TitleText.Text = Path.GetFileNameWithoutExtension(path);
             // 自動保存のときは「保存」ボタンと区切りを隠す（保存は自動で行う）
             SaveButton.Visibility = SaveSeparator.Visibility = AutoSave ? Visibility.Collapsed : Visibility.Visible;
+            // ライブラリに入っている曲だけが再生できる（グレーにならない）ので、ライブラリが変わったら見直す
+            _state.Library.Changed -= Library_Changed;
+            _state.Library.Changed += Library_Changed;
+            await LoadEntriesAsync(path);
+        }
+
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            // 表示していない間はライブラリの変化を受けない
+            _state.Library.Changed -= Library_Changed;
+        }
+
+        /// <summary>m3u を読み込んで一覧に並べる（開いたとき・ライブラリが変わったとき）。</summary>
+        private async Task LoadEntriesAsync(string path)
+        {
             LoadingRing.IsActive = true;
             try
             {
@@ -97,7 +113,7 @@ namespace MusicPlayer.Views
                 foreach (var entry in _doc.Entries)
                     _entries.Add(entry);
                 _loading = false;
-                _undo.Clear(); // 別のプレイリストを開いたら履歴は持ち越さない
+                _undo.Clear(); // 読み直したら履歴は持ち越さない（古い行に戻すと再生可否が古いままになるため）
                 ClearSortMark();
                 SetDirty(false);
             }
@@ -110,6 +126,21 @@ namespace MusicPlayer.Views
                 LoadingRing.IsActive = false;
             }
         }
+
+        /// <summary>
+        /// ライブラリの読み込み・再スキャンが終わったとき。起動直後などでライブラリがまだ空のうちに開くと
+        /// 全曲がグレーになるので、再生できるかどうかが変わる曲があれば読み直す。
+        /// 未保存の変更（保存待ちを含む）があるときは、編集内容を消さないよう読み直さない。
+        /// </summary>
+        private void Library_Changed() => DispatcherQueue.TryEnqueue(() =>
+        {
+            if (_doc == null || _loading || _dirty || _autoSaveTimer.IsEnabled)
+                return;
+            // 読み込み時（PlaylistService.LoadAsync）と同じ条件で、再生できるかどうかが変わった曲があるか調べる
+            bool changed = _entries.Any(x => x.IsMissing == (_state.Library.FindByPath(x.Track.Path) != null && File.Exists(x.Track.Path)));
+            if (changed)
+                SafeAsync.Run(() => LoadEntriesAsync(_doc.Path), XamlRoot, "playlist-reload");
+        });
 
         /// <summary>未保存の変更があれば、保存する／破棄する／留まる を選んでもらう。</summary>
         protected override void OnNavigatingFrom(NavigatingCancelEventArgs e) => SafeAsync.Run(() => OnNavigatingFromAsync(e), XamlRoot, "OnNavigatingFrom");
