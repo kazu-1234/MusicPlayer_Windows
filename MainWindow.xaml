@@ -1,0 +1,99 @@
+<Window x:Class="MusicPlayer.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:MusicPlayer.Controls">
+    <Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Auto Dark Mode 同等の WinUI TitleBar（カスタム Grid + 余白列は使わない） -->
+        <!-- 戻るボタンは WMP と同じくタイトルバー左端（アイコンの左）に置く -->
+        <TitleBar x:Name="AppTitleBar"
+                  Grid.Row="0"
+                  Title="Music Player"
+                  IsBackButtonVisible="True"
+                  IsBackButtonEnabled="False"
+                  BackRequested="AppTitleBar_BackRequested">
+            <TitleBar.IconSource>
+                <ImageIconSource ImageSource="ms-appx:///Assets/AppIcon.ico" />
+            </TitleBar.IconSource>
+        </TitleBar>
+
+        <NavigationView x:Name="NavView"
+                        Grid.Row="1"
+                        IsBackButtonVisible="Collapsed"
+                        IsSettingsVisible="False"
+                        IsPaneOpen="True"
+                        PaneDisplayMode="Left"
+                        OpenPaneLength="240"
+                        ItemInvoked="NavView_ItemInvoked">
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Uid="Nav_NowPlaying" Tag="NowPlaying">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEC4F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="NavItemLibrary" x:Uid="Nav_Library" Tag="Library">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8F1;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <!-- 子項目（各プレイリスト）はコードビハインドで作る。シェブロンで折りたたみできる -->
+                <NavigationViewItem x:Name="NavItemPlaylists" x:Uid="Nav_Playlists" SelectsOnInvoked="False"
+                                    RightTapped="NavItemPlaylists_RightTapped">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE90B;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <!-- 編集系は同じウィンドウ内のページとして切り替える -->
+                <NavigationViewItemHeader x:Uid="Nav_EditHeader" />
+                <NavigationViewItem x:Uid="Nav_TagEditor" Tag="TagEditor">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE70F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Uid="Nav_CdRip" Tag="CdRip">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE958;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Uid="Nav_Convert" Tag="Convert">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8AB;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Uid="Nav_Info" Tag="Info">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE946;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Uid="Nav_Settings" Tag="Settings">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE713;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
+            <NavigationView.Content>
+                <Frame x:Name="ContentFrame"
+                       Padding="0"
+                       HorizontalAlignment="Stretch"
+                       VerticalAlignment="Stretch"
+                       HorizontalContentAlignment="Stretch"
+                       VerticalContentAlignment="Stretch">
+                    <Frame.ContentTransitions>
+                        <TransitionCollection />
+                    </Frame.ContentTransitions>
+                </Frame>
+            </NavigationView.Content>
+        </NavigationView>
+
+        <!-- メディア プレーヤー風の常時表示の再生バー -->
+        <controls:PlayerBar x:Name="PlayerBar" Grid.Row="2" NowPlayingRequested="PlayerBar_NowPlayingRequested" />
+    </Grid>
+</Window>

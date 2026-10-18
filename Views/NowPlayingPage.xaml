@@ -1,0 +1,84 @@
+<Page
+    x:Class="MusicPlayer.Views.NowPlayingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:MusicPlayer.Models"
+    xmlns:controls="using:MusicPlayer.Controls"
+    xmlns:local="using:MusicPlayer.Views">
+    <Grid Margin="{StaticResource ListPageMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="Page_NowPlaying" Style="{StaticResource PageTitleTextStyle}" />
+
+        <Grid Grid.Row="1" ColumnSpacing="40" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 左: 大きなジャケットと曲情報 -->
+            <StackPanel Spacing="6" VerticalAlignment="Top">
+                <Grid x:Name="ArtHost">
+                    <Border Style="{StaticResource ArtPlaceholderBorderStyle}" CornerRadius="10">
+                        <FontIcon Glyph="&#xEC4F;" FontSize="72" Opacity="0.5" />
+                    </Border>
+                    <Border CornerRadius="10">
+                        <Image x:Name="ArtImage" Stretch="UniformToFill" />
+                    </Border>
+                </Grid>
+                <TextBlock x:Name="TitleText" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,12,0,0"
+                           TextWrapping="Wrap" MaxWidth="320" />
+                <TextBlock x:Name="ArtistText" Style="{StaticResource BodyTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" MaxWidth="320" />
+                <TextBlock x:Name="AlbumText" Style="{StaticResource CaptionTextBlockStyle}"
+                           Foreground="{ThemeResource TextFillColorTertiaryBrush}" TextWrapping="Wrap" MaxWidth="320" />
+            </StackPanel>
+
+            <!-- 右: 再生キュー（再生順） -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock x:Uid="NowPlaying_Queue" Style="{StaticResource SectionHeaderStyle}" />
+                <!-- ドラッグで並べ替え（再生中の曲は途切れない）。Ctrl+Z / Ctrl+Y で元に戻す・やり直し -->
+                <ListView x:Name="QueueList" ItemContainerStyle="{StaticResource TrackListItemStyle}" Grid.Row="1" SelectionMode="Single" IsItemClickEnabled="True"
+                          ItemClick="QueueList_ItemClick" RightTapped="QueueList_RightTapped"
+                          CanReorderItems="True" CanDragItems="True" AllowDrop="True"
+                          DragItemsStarting="QueueList_DragItemsStarting" DragItemsCompleted="QueueList_DragItemsCompleted">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <!-- KeepScrollOffset: 並べ替えで項目が動いてもスクロール位置を変えない（既定だと少し下へずれる） -->
+                            <ItemsStackPanel ItemsUpdatingScrollMode="KeepScrollOffset" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:QueueEntry">
+                            <Border Style="{StaticResource TrackRowBorderStyle}">
+                                <Grid ColumnSpacing="12" Height="{StaticResource TrackRowHeight}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="{StaticResource TrackRowArtColumnWidth}" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="56" />
+                                    </Grid.ColumnDefinitions>
+                                    <!-- 左端: 曲のジャケット（表示された行だけ非同期で読み込む） -->
+                                    <controls:TrackArt TrackPath="{x:Bind Track.Path}" />
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Bind Track.DisplayTitle}" Style="{StaticResource ListPrimaryTextStyle}" />
+                                        <TextBlock Text="{x:Bind Track.DisplayArtist}" Style="{StaticResource ListSecondaryTextStyle}" FontSize="12" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" Text="{x:Bind Track.DurationText}" Style="{StaticResource ListSecondaryTextStyle}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <TextBlock x:Name="EmptyText" Grid.Row="1" x:Uid="NowPlaying_Empty" Visibility="Collapsed"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

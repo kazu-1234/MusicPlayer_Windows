@@ -1,0 +1,6 @@
+#!/bin/sh
+# 取り除けなかった AI 痕跡が残っていればコミットを拒否する
+if grep -Eiq '^(Co-authored-by|Made-with):|cursoragent@|noreply@anthropic\.com|Generated with Claude' "$1"; then
+  echo "commit-msg: AI trailer is not allowed" >&2
+  exit 1
+fi

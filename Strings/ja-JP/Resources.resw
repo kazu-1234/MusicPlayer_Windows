@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppName" xml:space="preserve">
+    <value>Music Player</value>
+  </data>
+  <data name="Nav_Info.Content" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="Nav_Settings.Content" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Page_Info.Text" xml:space="preserve">
+    <value>情報</value>
+  </data>
+  <data name="Page_Settings.Text" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="Info_SectionUpdate.Text" xml:space="preserve">
+    <value>アップデート</value>
+  </data>
+  <data name="Info_UpdateDesc.Text" xml:space="preserve">
+    <value>GitHub リリースから最新版を確認します</value>
+  </data>
+  <data name="Info_LastUpdateCheck_Format" xml:space="preserve">
+    <value>最終確認日時 {0}</value>
+  </data>
+  <data name="Info_LastUpdateCheck_Never" xml:space="preserve">
+    <value>最終確認日時: 未確認</value>
+  </data>
+  <data name="Info_LastUpdateCheck_DateFormat" xml:space="preserve">
+    <value>yyyy/MM/dd ddd HH:mm:ss</value>
+  </data>
+  <data name="Info_AutoUpdateLabel.Text" xml:space="preserve">
+    <value>自動で最新版を確認</value>
+  </data>
+  <data name="Info_AutoUpdateDesc.Text" xml:space="preserve">
+    <value>起動時に更新を確認し、新しいバージョンがあれば確認後にインストールします</value>
+  </data>
+  <data name="Update_StartupDialogTitle" xml:space="preserve">
+    <value>更新あり</value>
+  </data>
+  <data name="Update_StartupDialogContent" xml:space="preserve">
+    <value>{0}&#x0a;&#x0a;今すぐ更新しますか？</value>
+  </data>
+  <data name="Update_StartupDialogInstall" xml:space="preserve">
+    <value>はい</value>
+  </data>
+  <data name="Update_StartupDialogLater" xml:space="preserve">
+    <value>いいえ</value>
+  </data>
+  <data name="Info_CheckUpdate.Content" xml:space="preserve">
+    <value>更新を確認</value>
+  </data>
+  <data name="Info_InstallUpdate.Content" xml:space="preserve">
+    <value>インストーラーをダウンロードして実行</value>
+  </data>
+  <data name="Info_SectionDisclaimer.Text" xml:space="preserve">
+    <value>免責事項</value>
+  </data>
+  <data name="Info_AboutDescription.Text" xml:space="preserve">
+    <value>ライブラリ再生・プレイリスト編集・CD 取り込み・形式変換・タグ編集ができる音楽プレーヤーです。</value>
+  </data>
+  <data name="Info_DisclaimerText.Text" xml:space="preserve">
+    <value>本ソフトウェアは現状有姿で提供されます。本ソフトウェアの利用により生じたいかなる損害（データの損失、機器の故障、業務の中断、逸失利益などを含みますがこれらに限りません）についても、開発者は一切の責任を負いません。本ソフトウェアの使用はすべて自己責任で行ってください。詳細はインストール時に表示される使用許諾および MIT License を参照してください。</value>
+  </data>
+  <data name="Settings_SectionAppearance.Text" xml:space="preserve">
+    <value>外観</value>
+  </data>
+  <data name="Settings_Theme.Text" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Settings_ThemeDesc.Text" xml:space="preserve">
+    <value>システム連動 / ライト / ダーク</value>
+  </data>
+  <data name="Settings_Theme_System" xml:space="preserve">
+    <value>システムの設定に従う</value>
+  </data>
+  <data name="Settings_Theme_Light" xml:space="preserve">
+    <value>常にライト</value>
+  </data>
+  <data name="Settings_Theme_Dark" xml:space="preserve">
+    <value>常にダーク</value>
+  </data>
+  <data name="Toggle_On" xml:space="preserve">
+    <value>オン</value>
+  </data>
+  <data name="Toggle_Off" xml:space="preserve">
+    <value>オフ</value>
+  </data>
+  <data name="NotAvailable" xml:space="preserve">
+    <value>—</value>
+  </data>
+  <data name="Version_Format" xml:space="preserve">
+    <value>現在のバージョン: v{0}</value>
+  </data>
+  <data name="Update_NotConfigured" xml:space="preserve">
+    <value>更新確認 URL が設定されていません</value>
+  </data>
+  <data name="Update_FetchFailed" xml:space="preserve">
+    <value>リリース情報の取得に失敗しました</value>
+  </data>
+  <data name="Update_Available" xml:space="preserve">
+    <value>新しいバージョン v{0} が利用可能です（現在: v{1}）</value>
+  </data>
+  <data name="Update_UpToDate" xml:space="preserve">
+    <value>v{0} は最新です</value>
+  </data>
+  <data name="Update_Error" xml:space="preserve">
+    <value>更新確認エラー: {0}</value>
+  </data>
+  <data name="Update_AvailableTitle" xml:space="preserve">
+    <value>更新あり</value>
+  </data>
+  <data name="Update_OpenRelease" xml:space="preserve">
+    <value>リリースページを開く</value>
+  </data>
+  <data name="Common_Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Update_DownloadReady" xml:space="preserve">
+    <value>バージョン {0} のインストーラーをダウンロードできます</value>
+  </data>
+  <data name="Update_Preparing" xml:space="preserve">
+    <value>準備中...</value>
+  </data>
+  <data name="Update_Downloading" xml:space="preserve">
+    <value>ダウンロード中...</value>
+  </data>
+  <data name="Update_LaunchingSetup" xml:space="preserve">
+    <value>インストーラーを起動しています...</value>
+  </data>
+  <data name="Update_SetupStarted" xml:space="preserve">
+    <value>インストーラーを起動しました。画面の指示に従って更新してください。</value>
+  </data>
+  <data name="Update_SetupRequired" xml:space="preserve">
+    <value>Inno Setup の setup.exe が見つかりません。Release ページから手動で更新してください。</value>
+  </data>
+  <data name="Update_Failed" xml:space="preserve">
+    <value>更新失敗: {0}</value>
+  </data>
+  <data name="Info_SectionThirdParty.Text" xml:space="preserve">
+    <value>サードパーティ</value>
+  </data>
+  <data name="Info_ThirdPartyText.Text" xml:space="preserve">
+    <value>FFmpeg (LGPL v2.1) — https://ffmpeg.org
+TagLib# (LGPL v2.1) — https://github.com/mono/taglib-sharp
+MusicBrainz / Cover Art Archive — https://musicbrainz.org</value>
+  </data>
+  <data name="Nav_NowPlaying.Content" xml:space="preserve">
+    <value>再生中</value>
+  </data>
+  <data name="Nav_Library.Content" xml:space="preserve">
+    <value>音楽ライブラリ</value>
+  </data>
+  <data name="Nav_Playlists.Content" xml:space="preserve">
+    <value>プレイリスト</value>
+  </data>
+  <data name="Nav_EditHeader.Content" xml:space="preserve">
+    <value>編集</value>
+  </data>
+  <data name="Nav_TagEditor.Content" xml:space="preserve">
+    <value>タグ編集</value>
+  </data>
+  <data name="Nav_CdRip.Content" xml:space="preserve">
+    <value>CD 取り込み</value>
+  </data>
+  <data name="Nav_Convert.Content" xml:space="preserve">
+    <value>変換</value>
+  </data>
+  <data name="Page_NowPlaying.Text" xml:space="preserve">
+    <value>再生中</value>
+  </data>
+  <data name="Page_Library.Text" xml:space="preserve">
+    <value>音楽ライブラリ</value>
+  </data>
+  <data name="Page_Playlists.Text" xml:space="preserve">
+    <value>プレイリスト</value>
+  </data>
+  <data name="Page_TagEditor.Text" xml:space="preserve">
+    <value>タグ編集</value>
+  </data>
+  <data name="Page_CdRip.Text" xml:space="preserve">
+    <value>CD 取り込み</value>
+  </data>
+  <data name="Page_Convert.Text" xml:space="preserve">
+    <value>変換</value>
+  </data>
+  <data name="Common_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Common_Error" xml:space="preserve">
+    <value>エラー</value>
+  </data>
+  <data name="Common_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Common_DontSave" xml:space="preserve">
+    <value>保存しない</value>
+  </data>
+  <data name="Common_Browse.Content" xml:space="preserve">
+    <value>参照</value>
+  </data>
+  <data name="Common_UnknownArtist" xml:space="preserve">
+    <value>不明なアーティスト</value>
+  </data>
+  <data name="Common_UnknownAlbum" xml:space="preserve">
+    <value>不明なアルバム</value>
+  </data>
+  <data name="Common_VariousArtists" xml:space="preserve">
+    <value>複数のアーティスト</value>
+  </data>
+  <data name="Album_Summary" xml:space="preserve">
+    <value>{0} 曲 · {1}</value>
+  </data>
+  <data name="Artist_Summary" xml:space="preserve">
+    <value>アルバム {0} · {1} 曲</value>
+  </data>
+  <data name="Column_Title.Text" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Column_Artist.Text" xml:space="preserve">
+    <value>アーティスト</value>
+  </data>
+  <data name="Column_Album.Text" xml:space="preserve">
+    <value>アルバム</value>
+  </data>
+  <data name="Column_Format.Text" xml:space="preserve">
+    <value>形式</value>
+  </data>
+  <data name="Column_Time.Text" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="Library_Songs.Text" xml:space="preserve">
+    <value>曲</value>
+  </data>
+  <data name="Library_Albums.Text" xml:space="preserve">
+    <value>アルバム</value>
+  </data>
+  <data name="Library_Artists.Text" xml:space="preserve">
+    <value>アーティスト</value>
+  </data>
+  <data name="Library_Search.PlaceholderText" xml:space="preserve">
+    <value>検索</value>
+  </data>
+  <data name="Library_ShuffleAll.Text" xml:space="preserve">
+    <value>すべてシャッフル</value>
+  </data>
+  <data name="Library_AllFormats" xml:space="preserve">
+    <value>すべての形式</value>
+  </data>
+  <data name="Library_Rescan" xml:space="preserve">
+    <value>再スキャン</value>
+  </data>
+  <data name="Library_RescanButton.Content" xml:space="preserve">
+    <value>再スキャン</value>
+  </data>
+  <data name="Library_Scanning" xml:space="preserve">
+    <value>スキャン中… {0}</value>
+  </data>
+  <data name="Library_Empty.Text" xml:space="preserve">
+    <value>曲が見つかりません</value>
+  </data>
+  <data name="Detail_PlayAll.Text" xml:space="preserve">
+    <value>すべて再生</value>
+  </data>
+  <data name="Detail_Shuffle.Text" xml:space="preserve">
+    <value>シャッフル</value>
+  </data>
+  <data name="Detail_More" xml:space="preserve">
+    <value>その他</value>
+  </data>
+  <data name="NowPlaying_Queue.Text" xml:space="preserve">
+    <value>再生キュー</value>
+  </data>
+  <data name="NowPlaying_Empty.Text" xml:space="preserve">
+    <value>再生キューは空です</value>
+  </data>
+  <data name="Player_Shuffle" xml:space="preserve">
+    <value>シャッフル</value>
+  </data>
+  <data name="Player_Previous" xml:space="preserve">
+    <value>前へ</value>
+  </data>
+  <data name="Player_PlayPause" xml:space="preserve">
+    <value>再生 / 一時停止</value>
+  </data>
+  <data name="Player_Next" xml:space="preserve">
+    <value>次へ</value>
+  </data>
+  <data name="Player_Mute" xml:space="preserve">
+    <value>ミュート</value>
+  </data>
+  <data name="Player_RepeatOff" xml:space="preserve">
+    <value>リピート: オフ</value>
+  </data>
+  <data name="Player_RepeatAll" xml:space="preserve">
+    <value>リピート: すべて</value>
+  </data>
+  <data name="Player_RepeatOne" xml:space="preserve">
+    <value>リピート: 1 曲</value>
+  </data>
+  <data name="Menu_Play" xml:space="preserve">
+    <value>再生</value>
+  </data>
+  <data name="Menu_PlayNext" xml:space="preserve">
+    <value>次に再生</value>
+  </data>
+  <data name="Menu_AddToQueue" xml:space="preserve">
+    <value>キューに追加</value>
+  </data>
+  <data name="Menu_AddToPlaylist" xml:space="preserve">
+    <value>プレイリストに追加</value>
+  </data>
+  <data name="Menu_NewPlaylist" xml:space="preserve">
+    <value>新しいプレイリスト</value>
+  </data>
+  <data name="Menu_EditTags" xml:space="preserve">
+    <value>タグを編集</value>
+  </data>
+  <data name="Menu_OpenLocation" xml:space="preserve">
+    <value>ファイルの場所を開く</value>
+  </data>
+  <data name="Menu_RemoveFromQueue" xml:space="preserve">
+    <value>キューから削除</value>
+  </data>
+  <data name="Menu_Rename" xml:space="preserve">
+    <value>名前を変更</value>
+  </data>
+  <data name="Menu_Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Playlist_New.Text" xml:space="preserve">
+    <value>新しいプレイリスト</value>
+  </data>
+  <data name="Playlist_NewTitle" xml:space="preserve">
+    <value>プレイリスト名</value>
+  </data>
+  <data name="Playlist_OpenFolder.Text" xml:space="preserve">
+    <value>フォルダを開く</value>
+  </data>
+  <data name="Playlist_Empty.Text" xml:space="preserve">
+    <value>プレイリストがありません</value>
+  </data>
+  <data name="Playlist_CountFormat" xml:space="preserve">
+    <value>{0} 曲</value>
+  </data>
+  <data name="Playlist_NameExists" xml:space="preserve">
+    <value>「{0}」は既にあります</value>
+  </data>
+  <data name="Playlist_DeleteTitle" xml:space="preserve">
+    <value>プレイリストの削除</value>
+  </data>
+  <data name="Playlist_DeleteMessage" xml:space="preserve">
+    <value>「{0}」をごみ箱に移動しますか？</value>
+  </data>
+  <data name="Playlist_AddFiles.Text" xml:space="preserve">
+    <value>曲を追加</value>
+  </data>
+  <data name="Playlist_Remove.Text" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Playlist_MoveUp" xml:space="preserve">
+    <value>上へ</value>
+  </data>
+  <data name="Playlist_MoveDown" xml:space="preserve">
+    <value>下へ</value>
+  </data>
+  <data name="Playlist_Unsaved.Text" xml:space="preserve">
+    <value>未保存</value>
+  </data>
+  <data name="Playlist_UnsavedTitle" xml:space="preserve">
+    <value>未保存の変更</value>
+  </data>
+  <data name="Playlist_UnsavedMessage" xml:space="preserve">
+    <value>「{0}」の変更を保存しますか？</value>
+  </data>
+  <data name="Tag_AddFiles.Text" xml:space="preserve">
+    <value>ファイルを追加</value>
+  </data>
+  <data name="Tag_AddFolder.Text" xml:space="preserve">
+    <value>フォルダを追加</value>
+  </data>
+  <data name="Tag_Clear" xml:space="preserve">
+    <value>一覧をクリア</value>
+  </data>
+  <data name="Tag_Empty.Text" xml:space="preserve">
+    <value>編集するファイルを追加してください</value>
+  </data>
+  <data name="Tag_SelectionCount" xml:space="preserve">
+    <value>{0} 個のファイルを選択中</value>
+  </data>
+  <data name="Tag_MultipleValues" xml:space="preserve">
+    <value>(複数の値)</value>
+  </data>
+  <data name="Tag_ChangeCover.Content" xml:space="preserve">
+    <value>画像を変更</value>
+  </data>
+  <data name="Tag_RemoveCover.Content" xml:space="preserve">
+    <value>画像を削除</value>
+  </data>
+  <data name="Tag_Title.Header" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Tag_Artist.Header" xml:space="preserve">
+    <value>アーティスト</value>
+  </data>
+  <data name="Tag_AlbumArtist.Header" xml:space="preserve">
+    <value>アルバムアーティスト</value>
+  </data>
+  <data name="Tag_Album.Header" xml:space="preserve">
+    <value>アルバム</value>
+  </data>
+  <data name="Tag_Genre.Header" xml:space="preserve">
+    <value>ジャンル</value>
+  </data>
+  <data name="Tag_Year.Header" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="Tag_Track.Header" xml:space="preserve">
+    <value>トラック番号</value>
+  </data>
+  <data name="Tag_TrackCount.Header" xml:space="preserve">
+    <value>トラック数</value>
+  </data>
+  <data name="Tag_Disc.Header" xml:space="preserve">
+    <value>ディスク番号</value>
+  </data>
+  <data name="Tag_Saved" xml:space="preserve">
+    <value>{0} 個のファイルに保存しました</value>
+  </data>
+  <data name="Tag_SaveFailed" xml:space="preserve">
+    <value>保存できなかったファイルがあります</value>
+  </data>
+  <data name="Preset_Quality" xml:space="preserve">
+    <value>音質優先</value>
+  </data>
+  <data name="Preset_Balanced" xml:space="preserve">
+    <value>バランス</value>
+  </data>
+  <data name="Preset_Size" xml:space="preserve">
+    <value>サイズ優先</value>
+  </data>
+  <data name="Preset_Lossless" xml:space="preserve">
+    <value>可逆（劣化なし）</value>
+  </data>
+  <data name="Convert_Format.Header" xml:space="preserve">
+    <value>形式</value>
+  </data>
+  <data name="Convert_Quality.Header" xml:space="preserve">
+    <value>品質</value>
+  </data>
+  <data name="Convert_Output.Header" xml:space="preserve">
+    <value>保存先</value>
+  </data>
+  <data name="Convert_SameFolder.Content" xml:space="preserve">
+    <value>元と同じ場所</value>
+  </data>
+  <data name="Convert_SameFolderText" xml:space="preserve">
+    <value>元のファイルと同じフォルダ</value>
+  </data>
+  <data name="Convert_FfmpegMissingBar.Title" xml:space="preserve">
+    <value>ffmpeg が見つかりません</value>
+  </data>
+  <data name="Convert_FfmpegMissingBar.Message" xml:space="preserve">
+    <value>scripts\fetch-ffmpeg.ps1 で取得してから再ビルドしてください。</value>
+  </data>
+  <data name="Convert_FfmpegMissing" xml:space="preserve">
+    <value>ffmpeg が見つかりません</value>
+  </data>
+  <data name="Convert_Empty.Text" xml:space="preserve">
+    <value>変換するファイルを追加してください</value>
+  </data>
+  <data name="Convert_Start.Text" xml:space="preserve">
+    <value>変換開始</value>
+  </data>
+  <data name="Convert_Running" xml:space="preserve">
+    <value>変換中…</value>
+  </data>
+  <data name="Convert_Done" xml:space="preserve">
+    <value>完了</value>
+  </data>
+  <data name="Convert_Failed" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="Convert_Canceled" xml:space="preserve">
+    <value>キャンセルしました</value>
+  </data>
+  <data name="Convert_Progress" xml:space="preserve">
+    <value>{0} / {1}</value>
+  </data>
+  <data name="Convert_Finished" xml:space="preserve">
+    <value>完了 {0} 件 · 失敗 {1} 件</value>
+  </data>
+  <data name="Rip_Drive.Header" xml:space="preserve">
+    <value>ドライブ</value>
+  </data>
+  <data name="Rip_Read.Text" xml:space="preserve">
+    <value>読み込み</value>
+  </data>
+  <data name="Rip_Eject.Text" xml:space="preserve">
+    <value>取り出し</value>
+  </data>
+  <data name="Rip_Candidates.Header" xml:space="preserve">
+    <value>曲情報の候補</value>
+  </data>
+  <data name="Rip_DiscCount.Header" xml:space="preserve">
+    <value>ディスク数</value>
+  </data>
+  <data name="Rip_Empty.Text" xml:space="preserve">
+    <value>CD を入れて「読み込み」を押してください</value>
+  </data>
+  <data name="Rip_Start.Text" xml:space="preserve">
+    <value>取り込み開始</value>
+  </data>
+  <data name="Rip_NoDrive" xml:space="preserve">
+    <value>CD ドライブが見つかりません</value>
+  </data>
+  <data name="Rip_NoAudioTracks" xml:space="preserve">
+    <value>音楽トラックがありません</value>
+  </data>
+  <data name="Rip_ReadFailed" xml:space="preserve">
+    <value>CD を読み込めませんでした。</value>
+  </data>
+  <data name="Rip_LookupFailed" xml:space="preserve">
+    <value>曲情報を取得できませんでした。</value>
+  </data>
+  <data name="Rip_NotFound" xml:space="preserve">
+    <value>MusicBrainz に曲情報がありません。手入力してください。</value>
+  </data>
+  <data name="Rip_FfmpegMissing" xml:space="preserve">
+    <value>WAV 以外で取り込むには ffmpeg が必要です。</value>
+  </data>
+  <data name="Rip_TrackDefault" xml:space="preserve">
+    <value>トラック {0:00}</value>
+  </data>
+  <data name="Rip_Waiting" xml:space="preserve">
+    <value>待機中</value>
+  </data>
+  <data name="Rip_Reading" xml:space="preserve">
+    <value>読み取り中…</value>
+  </data>
+  <data name="Rip_Encoding" xml:space="preserve">
+    <value>変換中…</value>
+  </data>
+  <data name="Rip_DoneWithErrors" xml:space="preserve">
+    <value>完了（読み取りエラー {0} セクタ）</value>
+  </data>
+  <data name="Rip_Finished" xml:space="preserve">
+    <value>{0} 曲を取り込みました: {1}</value>
+  </data>
+  <data name="Settings_SectionLibrary.Text" xml:space="preserve">
+    <value>ライブラリ</value>
+  </data>
+  <data name="Settings_SectionConvert.Text" xml:space="preserve">
+    <value>変換</value>
+  </data>
+  <data name="Settings_LibraryFolders.Header" xml:space="preserve">
+    <value>ライブラリのフォルダ</value>
+  </data>
+  <data name="Settings_AddFolder.Content" xml:space="preserve">
+    <value>フォルダを追加</value>
+  </data>
+  <data name="Settings_PlaylistFolder.Header" xml:space="preserve">
+    <value>プレイリストのフォルダ</value>
+  </data>
+  <data name="Settings_RipFolder.Header" xml:space="preserve">
+    <value>CD 取り込みの保存先</value>
+  </data>
+  <data name="Settings_Change.Content" xml:space="preserve">
+    <value>変更</value>
+  </data>
+  <data name="Settings_Ffmpeg.Header" xml:space="preserve">
+    <value>ffmpeg</value>
+  </data>
+  <data name="Settings_FfmpegMissing" xml:space="preserve">
+    <value>見つかりません</value>
+  </data>
+  <data name="Button_Save.Text" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Button_Cancel.Content" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="Player_OpenNowPlaying" xml:space="preserve">
+    <value>再生中の画面を開く</value>
+  </data>
+  <data name="Tag_Lookup.Text" xml:space="preserve">
+    <value>オンラインで取得</value>
+  </data>
+  <data name="Tag_Candidates.PlaceholderText" xml:space="preserve">
+    <value>候補（MusicBrainz）</value>
+  </data>
+  <data name="Tag_LookupNotFound" xml:space="preserve">
+    <value>オンラインで一致する曲が見つかりませんでした。曲名・アーティスト・アルバムを確かめてもう一度お試しください。</value>
+  </data>
+  <data name="Tag_LookupFailed" xml:space="preserve">
+    <value>オンラインの情報を取得できませんでした。</value>
+  </data>
+  <data name="Tag_LookupNeedAlbum" xml:space="preserve">
+    <value>複数の曲をまとめて取得するには、アルバム名を入力してください。</value>
+  </data>
+  <data name="Tag_LookupMatched" xml:space="preserve">
+    <value>{1} 曲中 {0} 曲の曲名・番号をアルバムと照合しました。「保存」で書き込みます。</value>
+  </data>
+  <data name="Sort_Button" xml:space="preserve">
+    <value>並べ替え</value>
+  </data>
+  <data name="Sort_Name" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="Sort_Title" xml:space="preserve">
+    <value>タイトル</value>
+  </data>
+  <data name="Sort_Artist" xml:space="preserve">
+    <value>アーティスト</value>
+  </data>
+  <data name="Sort_Album" xml:space="preserve">
+    <value>アルバム</value>
+  </data>
+  <data name="Sort_Year" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="Sort_Added" xml:space="preserve">
+    <value>追加日</value>
+  </data>
+  <data name="Sort_Ascending" xml:space="preserve">
+    <value>昇順</value>
+  </data>
+  <data name="Sort_Descending" xml:space="preserve">
+    <value>降順</value>
+  </data>
+  <data name="Settings_NameSort.Header" xml:space="preserve">
+    <value>名前の並べ方</value>
+  </data>
+  <data name="Settings_NameSort.Description" xml:space="preserve">
+    <value>名前順で並べるときの、かな・漢字の扱い。漢字は読み（音読み・訓読み）で並べます。</value>
+  </data>
+  <data name="Settings_NameSort_Separate" xml:space="preserve">
+    <value>英字・かな・漢字を分ける</value>
+  </data>
+  <data name="Settings_NameSort_Mixed" xml:space="preserve">
+    <value>漢字も読みでかなと混ぜる</value>
+  </data>
+  <data name="Settings_PlaylistAutoSave.Header" xml:space="preserve">
+    <value>プレイリストを自動保存</value>
+  </data>
+  <data name="Settings_PlaylistAutoSave.Description" xml:space="preserve">
+    <value>並べ替えや削除をすると自動で保存します。保存の直前の内容は 1 回分バックアップされます。</value>
+  </data>
+  <data name="Group_Kanji" xml:space="preserve">
+    <value>漢字</value>
+  </data>
+  <data name="Group_AddedFormat" xml:space="preserve">
+    <value>yyyy年M月</value>
+  </data>
+  <data name="Thumb_Play" xml:space="preserve">
+    <value>再生</value>
+  </data>
+  <data name="Thumb_Pause" xml:space="preserve">
+    <value>一時停止</value>
+  </data>
+  <data name="Column_Added.Text" xml:space="preserve">
+    <value>追加日</value>
+  </data>
+  <data name="Column_Number.Text" xml:space="preserve">
+    <value>#</value>
+  </data>
+  <data name="Tag_TitleSort.Header" xml:space="preserve">
+    <value>タイトルの読み</value>
+  </data>
+  <data name="Tag_ArtistSort.Header" xml:space="preserve">
+    <value>アーティストの読み</value>
+  </data>
+  <data name="Tag_AlbumSort.Header" xml:space="preserve">
+    <value>アルバムの読み</value>
+  </data>
+</root>

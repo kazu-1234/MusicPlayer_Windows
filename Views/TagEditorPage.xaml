@@ -1,0 +1,142 @@
+<Page
+    x:Class="MusicPlayer.Views.TagEditorPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MusicPlayer.Views"
+    NavigationCacheMode="Required">
+    <Grid Margin="{StaticResource ListPageMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="Page_TagEditor" Style="{StaticResource PageTitleTextStyle}" />
+
+        <Grid Grid.Row="1" ColumnSpacing="24" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="280" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- 左: 編集対象のファイル一覧（複数選択で一括編集） -->
+            <Grid RowSpacing="8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                    <Button Click="AddFilesButton_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE8E5;" FontSize="14" />
+                            <TextBlock x:Uid="Tag_AddFiles" />
+                        </StackPanel>
+                    </Button>
+                    <Button Click="AddFolderButton_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE8B7;" FontSize="14" />
+                            <TextBlock x:Uid="Tag_AddFolder" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ClearButton" Click="ClearButton_Click">
+                        <FontIcon Glyph="&#xE894;" FontSize="14" />
+                    </Button>
+                </StackPanel>
+                <ListView x:Name="FilesList" Grid.Row="1" SelectionMode="Extended"
+                          BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="6"
+                          SelectionChanged="FilesList_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:TagFileItem">
+                            <StackPanel Padding="0,4">
+                                <TextBlock Text="{x:Bind FileName}" Style="{StaticResource ListPrimaryTextStyle}" />
+                                <TextBlock Text="{x:Bind Folder}" Style="{StaticResource ListSecondaryTextStyle}" FontSize="12" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <TextBlock x:Name="EmptyText" Grid.Row="1" x:Uid="Tag_Empty" HorizontalAlignment="Center" VerticalAlignment="Center"
+                           TextWrapping="Wrap" Margin="16" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </Grid>
+
+            <!-- 右: タグ入力欄 -->
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="FormPanel" Spacing="12" IsHitTestVisible="False" Opacity="0.5" Padding="0,0,16,0">
+                    <TextBlock x:Name="SelectionText" Style="{StaticResource CaptionTextBlockStyle}"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+                    <!-- オンライン（MusicBrainz）から曲情報とジャケットを取得。候補を選ぶと下の欄に入る（保存するまで書き込まない） -->
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                        <Button x:Name="LookupButton" Click="LookupButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE721;" FontSize="14" />
+                                <TextBlock x:Uid="Tag_Lookup" />
+                            </StackPanel>
+                        </Button>
+                        <ComboBox x:Name="CandidateCombo" x:Uid="Tag_Candidates" MinWidth="320" MaxWidth="560" IsEnabled="False"
+                                  SelectionChanged="CandidateCombo_SelectionChanged" />
+                        <ProgressRing x:Name="LookupRing" IsActive="False" Width="20" Height="20" />
+                    </StackPanel>
+
+                    <!-- ジャケット -->
+                    <StackPanel Orientation="Horizontal" Spacing="16">
+                        <Grid Width="140" Height="140">
+                            <Border Style="{StaticResource ArtPlaceholderBorderStyle}">
+                                <FontIcon Glyph="&#xE93C;" FontSize="40" Opacity="0.5" />
+                            </Border>
+                            <Border CornerRadius="6">
+                                <Image x:Name="CoverImage" Stretch="UniformToFill" />
+                            </Border>
+                        </Grid>
+                        <StackPanel Spacing="8" VerticalAlignment="Bottom">
+                            <Button x:Uid="Tag_ChangeCover" Click="ChangeCoverButton_Click" />
+                            <Button x:Uid="Tag_RemoveCover" Click="RemoveCoverButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <TextBox x:Name="TitleBox" x:Uid="Tag_Title" />
+                    <TextBox x:Name="ArtistBox" x:Uid="Tag_Artist" />
+                    <TextBox x:Name="AlbumArtistBox" x:Uid="Tag_AlbumArtist" />
+                    <TextBox x:Name="AlbumBox" x:Uid="Tag_Album" />
+                    <!-- 読み（並べ替え用）。難読の曲名（例: 我逢人 → がほうじん）を、漢字を混ぜる設定で正しい位置に並べるため -->
+                    <Grid ColumnSpacing="{StaticResource ControlRowSpacing}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TitleSortBox" x:Uid="Tag_TitleSort" />
+                        <TextBox x:Name="ArtistSortBox" x:Uid="Tag_ArtistSort" Grid.Column="1" />
+                        <TextBox x:Name="AlbumSortBox" x:Uid="Tag_AlbumSort" Grid.Column="2" />
+                    </Grid>
+                    <Grid ColumnSpacing="{StaticResource ControlRowSpacing}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="GenreBox" x:Uid="Tag_Genre" />
+                        <TextBox x:Name="YearBox" x:Uid="Tag_Year" Grid.Column="1" InputScope="Number" />
+                    </Grid>
+                    <Grid ColumnSpacing="{StaticResource ControlRowSpacing}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="TrackBox" x:Uid="Tag_Track" InputScope="Number" />
+                        <TextBox x:Name="TrackCountBox" x:Uid="Tag_TrackCount" Grid.Column="1" InputScope="Number" />
+                        <TextBox x:Name="DiscBox" x:Uid="Tag_Disc" Grid.Column="2" InputScope="Number" />
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}" Margin="0,8,0,0">
+                        <Button x:Name="SaveButton" Style="{StaticResource PrimaryActionButtonStyle}" Click="SaveButton_Click">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE74E;" FontSize="14" />
+                                <TextBlock x:Uid="Button_Save" />
+                            </StackPanel>
+                        </Button>
+                        <ProgressRing x:Name="SaveRing" IsActive="False" Width="20" Height="20" />
+                    </StackPanel>
+                    <InfoBar x:Name="ResultBar" IsOpen="False" IsClosable="True" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</Page>

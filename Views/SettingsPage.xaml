@@ -1,0 +1,93 @@
+<Page
+    x:Class="MusicPlayer.Views.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:views="using:MusicPlayer.Views"
+    HorizontalAlignment="Stretch"
+    VerticalAlignment="Stretch">
+    <views:PageScrollHost>
+        <Grid x:Name="ContentArea">
+            <StackPanel Style="{StaticResource PageBaseStackPanelStyle}">
+                <TextBlock x:Uid="Page_Settings" Style="{StaticResource PageTitleTextStyle}" />
+
+                <TextBlock x:Uid="Settings_SectionAppearance" Style="{StaticResource SettingsSectionHeaderFirstStyle}" />
+
+                <controls:SettingsCard>
+                    <controls:SettingsCard.Header>
+                        <StackPanel Spacing="4" MinWidth="0">
+                            <TextBlock x:Uid="Settings_Theme" Style="{StaticResource CardHeaderTextStyle}" />
+                            <TextBlock x:Uid="Settings_ThemeDesc" Style="{StaticResource CardDescriptionTextStyle}" />
+                        </StackPanel>
+                    </controls:SettingsCard.Header>
+                    <ComboBox x:Name="ThemeComboBox"
+                              Style="{StaticResource CompactComboBoxThemeStyle}"
+                              SelectionChanged="ThemeComboBox_SelectionChanged" />
+                </controls:SettingsCard>
+
+                <!-- ライブラリ・フォルダ -->
+                <TextBlock x:Uid="Settings_SectionLibrary" Style="{StaticResource SettingsSectionHeaderStyle}" />
+
+                <controls:SettingsExpander x:Uid="Settings_LibraryFolders" IsExpanded="True">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE8B7;" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <StackPanel Orientation="Horizontal" Spacing="{StaticResource ControlRowSpacing}">
+                        <Button x:Uid="Settings_AddFolder" Click="AddLibraryFolderButton_Click" />
+                        <Button x:Name="RescanButton" x:Uid="Library_RescanButton" Click="RescanButton_Click" />
+                    </StackPanel>
+                    <controls:SettingsExpander.ItemsHeader>
+                        <ItemsControl x:Name="LibraryFoldersList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <controls:SettingsCard Header="{x:Bind}">
+                                        <Button Tag="{x:Bind}" Click="RemoveLibraryFolderButton_Click">
+                                            <FontIcon Glyph="&#xE74D;" FontSize="14" />
+                                        </Button>
+                                    </controls:SettingsCard>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </controls:SettingsExpander.ItemsHeader>
+                </controls:SettingsExpander>
+
+                <!-- 名前順の並べ方: かな・漢字を分ける（従来）／漢字も読みで混ぜる -->
+                <controls:SettingsCard x:Uid="Settings_NameSort">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8CB;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <ComboBox x:Name="NameSortComboBox" SelectionChanged="NameSortComboBox_SelectionChanged" />
+                </controls:SettingsCard>
+
+                <!-- プレイリストの自動保存（既定オン） -->
+                <controls:SettingsCard x:Uid="Settings_PlaylistAutoSave">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE74E;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <ToggleSwitch x:Name="AutoSaveToggle" Toggled="AutoSaveToggle_Toggled" />
+                </controls:SettingsCard>
+
+                <controls:SettingsCard x:Uid="Settings_RipFolder">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE958;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <controls:SettingsCard.Description>
+                        <TextBlock x:Name="RipFolderText" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                    </controls:SettingsCard.Description>
+                    <Button x:Uid="Settings_Change" Click="ChangeRipFolderButton_Click" />
+                </controls:SettingsCard>
+
+                <!-- 変換エンジン -->
+                <TextBlock x:Uid="Settings_SectionConvert" Style="{StaticResource SettingsSectionHeaderStyle}" />
+                <controls:SettingsCard x:Uid="Settings_Ffmpeg">
+                    <controls:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE8AB;" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <controls:SettingsCard.Description>
+                        <TextBlock x:Name="FfmpegText" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                    </controls:SettingsCard.Description>
+                </controls:SettingsCard>
+            </StackPanel>
+        </Grid>
+    </views:PageScrollHost>
+</Page>

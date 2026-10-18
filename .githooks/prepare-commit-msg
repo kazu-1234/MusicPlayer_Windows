@@ -1,0 +1,3 @@
+#!/bin/sh
+# AI 名義の trailer（Co-authored-by など）をコミットメッセージから自動で取り除く
+sed -i -E '/^(Co-authored-by|Made-with):/Id; /cursoragent@|noreply@anthropic\.com|Generated with Claude/Id' "$1"

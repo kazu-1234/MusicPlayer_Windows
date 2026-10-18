@@ -1,0 +1,136 @@
+<Page
+    x:Class="MusicPlayer.Views.CdRipPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MusicPlayer.Views"
+    NavigationCacheMode="Required">
+    <!-- 取り込み中に別ページへ移っても進捗が消えないようページをキャッシュする -->
+    <Grid Margin="{StaticResource ListPageMargin}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock x:Uid="Page_CdRip" Style="{StaticResource PageTitleTextStyle}" />
+
+        <!-- ドライブ / 読み込み / 取り出し / 曲情報の候補 -->
+        <Grid Grid.Row="1" ColumnSpacing="{StaticResource ControlRowSpacing}" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="DriveCombo" x:Uid="Rip_Drive" MinWidth="100" />
+            <Button x:Name="ReadButton" Grid.Column="1" VerticalAlignment="Bottom" Style="{StaticResource AccentButtonStyle}" Click="ReadButton_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE958;" FontSize="14" />
+                    <TextBlock x:Uid="Rip_Read" />
+                </StackPanel>
+            </Button>
+            <Button x:Name="EjectButton" Grid.Column="2" VerticalAlignment="Bottom" Click="EjectButton_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon Glyph="&#xE74A;" FontSize="14" />
+                    <TextBlock x:Uid="Rip_Eject" />
+                </StackPanel>
+            </Button>
+            <ComboBox x:Name="ReleaseCombo" x:Uid="Rip_Candidates" Grid.Column="3" HorizontalAlignment="Stretch"
+                      SelectionChanged="ReleaseCombo_SelectionChanged" IsEnabled="False" />
+        </Grid>
+
+        <InfoBar x:Name="MessageBar" Grid.Row="2" IsOpen="False" IsClosable="True" Margin="0,0,0,8" />
+
+        <!-- アルバム情報 + ジャケット -->
+        <Grid Grid.Row="3" ColumnSpacing="16" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Spacing="6">
+                <Grid Width="112" Height="112">
+                    <Border Style="{StaticResource ArtPlaceholderBorderStyle}">
+                        <FontIcon Glyph="&#xE958;" FontSize="36" Opacity="0.5" />
+                    </Border>
+                    <Border CornerRadius="6">
+                        <Image x:Name="CoverImage" Stretch="UniformToFill" />
+                    </Border>
+                </Grid>
+                <Button x:Uid="Tag_ChangeCover" HorizontalAlignment="Stretch" Click="ChangeCoverButton_Click" />
+            </StackPanel>
+            <Grid Grid.Column="1" ColumnSpacing="{StaticResource ControlRowSpacing}" RowSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBox x:Name="AlbumBox" x:Uid="Tag_Album" />
+                <TextBox x:Name="AlbumArtistBox" x:Uid="Tag_AlbumArtist" Grid.Column="1" />
+                <TextBox x:Name="YearBox" x:Uid="Tag_Year" Grid.Column="2" InputScope="Number" />
+                <TextBox x:Name="GenreBox" x:Uid="Tag_Genre" Grid.Row="1" />
+                <TextBox x:Name="DiscBox" x:Uid="Tag_Disc" Grid.Row="1" Grid.Column="1" InputScope="Number" />
+                <TextBox x:Name="DiscCountBox" x:Uid="Rip_DiscCount" Grid.Row="1" Grid.Column="2" InputScope="Number" />
+            </Grid>
+        </Grid>
+
+        <!-- トラック一覧（チェックしたものだけ取り込む。曲名・アーティストは直接編集できる） -->
+        <ListView x:Name="TracksList" Grid.Row="4" SelectionMode="None"
+                  BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="6">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:RipTrackItem">
+                    <Grid ColumnSpacing="12" Padding="0,4">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="32" />
+                            <ColumnDefinition Width="28" />
+                            <ColumnDefinition Width="3*" />
+                            <ColumnDefinition Width="2*" />
+                            <ColumnDefinition Width="48" />
+                            <ColumnDefinition Width="160" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{x:Bind IsSelected, Mode=TwoWay}" MinWidth="0" />
+                        <TextBlock Grid.Column="1" Text="{x:Bind NumberText}" Style="{StaticResource ListSecondaryTextStyle}" />
+                        <TextBox Grid.Column="2" Text="{x:Bind Title, Mode=TwoWay}" />
+                        <TextBox Grid.Column="3" Text="{x:Bind Artist, Mode=TwoWay}" />
+                        <TextBlock Grid.Column="4" Text="{x:Bind LengthText}" Style="{StaticResource ListSecondaryTextStyle}" />
+                        <StackPanel Grid.Column="5" VerticalAlignment="Center" Spacing="2">
+                            <ProgressBar Value="{x:Bind Progress, Mode=OneWay}" Maximum="100" />
+                            <TextBlock Text="{x:Bind Status, Mode=OneWay}" Style="{StaticResource ListSecondaryTextStyle}" FontSize="12" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <TextBlock x:Name="EmptyText" Grid.Row="4" x:Uid="Rip_Empty" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+        <!-- 出力形式 / 品質 / 保存先 / 開始 -->
+        <Grid Grid.Row="5" ColumnSpacing="{StaticResource ControlRowSpacing}" Margin="0,12,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <ComboBox x:Name="FormatCombo" x:Uid="Convert_Format" MinWidth="130" SelectionChanged="FormatCombo_SelectionChanged" />
+            <ComboBox x:Name="PresetCombo" x:Uid="Convert_Quality" Grid.Column="1" MinWidth="200" SelectionChanged="PresetCombo_SelectionChanged" />
+            <TextBox x:Name="OutputBox" x:Uid="Convert_Output" Grid.Column="2" IsReadOnly="True" />
+            <Button Grid.Column="3" x:Uid="Common_Browse" VerticalAlignment="Bottom" Click="BrowseButton_Click" />
+            <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="8" VerticalAlignment="Bottom">
+                <Button x:Name="RipButton" Style="{StaticResource AccentButtonStyle}" IsEnabled="False" Click="RipButton_Click">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE896;" FontSize="14" />
+                        <TextBlock x:Uid="Rip_Start" />
+                    </StackPanel>
+                </Button>
+                <Button x:Name="CancelButton" x:Uid="Button_Cancel" IsEnabled="False" Click="CancelButton_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
