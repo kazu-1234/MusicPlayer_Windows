@@ -51,4 +51,15 @@
     <!-- 共通ライブラリはテンプレート側を参照する（ARCHITECTURE.md 6 章：複製後も Template の Shared を参照） -->
     <ProjectReference Include="..\WinUiAppTemplate\Shared\WinUiShared.csproj" />
   </ItemGroup>
+  <!--
+    unpackaged（WindowsPackageType=None）の dotnet publish では、XAML をコンパイルした .xbf（App / MainWindow / 各ページ）と
+    MusicPlayer.pri が出力に入らず、インストールしたアプリが起動直後にクラッシュする（XAML を読めない）。
+    ビルド出力にあるこれらを publish の対象に加える。
+  -->
+  <Target Name="IncludeXamlOutputsInPublish" BeforeTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <_XamlOutput Include="$(OutDir)**\*.xbf;$(OutDir)MusicPlayer.pri" />
+      <ResolvedFileToPublish Include="@(_XamlOutput)" RelativePath="%(RecursiveDir)%(Filename)%(Extension)" CopyToPublishDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
 </Project>
